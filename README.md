@@ -1,3 +1,13 @@
 # decl-cm-playground
 
 AKA: Declarative configuration management playground.
+
+## Idea
+
+[Declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) has several
+definitions which are not entirely compatible with each other. This leads to
+people describing a variety of systems as declarative in one sense, but not in
+other senses.
+
+This repository will explore this in the context of configuration management as
+the approach used by these software systems can vary greatly.
