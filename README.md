@@ -14,3 +14,10 @@ This repository will explore this in the context of configuration management
 particular, some CM systems allow for conditionals, loops, and ordering of
 tasks. While these constructs are useful, depending on their implementation,
 they can make the CM system less declarative.
+
+One approach that I'm thinking through is that CM systems could use a knowledge
+management system. This is already implemented in CFEngine 3 using Topic Maps.
+
+There is also a slightly related area called "knowledge-based configuration".
+This is more about using knowledge representation to model software product
+lines.
