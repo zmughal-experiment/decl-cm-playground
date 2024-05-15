@@ -17,6 +17,9 @@ they can make the CM system less declarative.
 
 One approach that I'm thinking through is that CM systems could use a knowledge
 management system. This is already implemented in CFEngine 3 using Topic Maps.
+What I am after here is not gathering facts about a running system, but
+capturing facts about what makes up a final system and all its components. This
+would give a hierarchical model along with dependencies between the components.
 
 There is also a slightly related area called "knowledge-based configuration".
 This is more about using knowledge representation to model software product
