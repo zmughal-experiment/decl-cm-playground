@@ -20,7 +20,9 @@ management system. This is already implemented in CFEngine 3 using Topic Maps.
 What I am after here is not gathering facts about a running system, but
 capturing facts about what makes up a final system and all its components. This
 would give a hierarchical model along with dependencies and interfaces between
-the components.
+the components. These dependencies and interfaces are important because it is
+the relationships between components that can reveal the order that changes
+should be made.
 
 There is also a slightly related area called "knowledge-based configuration".
 This is more about using knowledge representation to model software product
