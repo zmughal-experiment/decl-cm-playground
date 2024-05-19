@@ -28,4 +28,5 @@ should be made.
 
 There is also a slightly related area called "knowledge-based configuration".
 This is more about using knowledge representation to model software product
-lines.
+lines (SPL). Work in that area could be useful in the sense that the SPLs
+represent a system.
