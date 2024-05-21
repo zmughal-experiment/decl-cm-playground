@@ -16,7 +16,9 @@ tasks. While these constructs are useful, depending on their implementation,
 they can make the CM system less declarative.
 
 One approach that I'm thinking through is that CM systems could use a knowledge
-management system. This is already implemented in CFEngine 3 using Topic Maps.
+management system. This is already implemented in CFEngine 3 using Topic Maps
+[^cfengine-impl-km](https://docs.cfengine.com/docs/archive/manuals/st-knowledge.html)
+.
 What I am after here is not gathering facts about a running system, but
 capturing facts about what makes up a final system and all its components. To
 say it another way,  the knowledge here should be *a priori*.
