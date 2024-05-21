@@ -30,6 +30,7 @@ should be made.
 
 There is also a slightly related area called
 ["knowledge-based configuration"](https://en.wikipedia.org/wiki/Knowledge-based_configuration).
-This is more about using knowledge representation to model software product
-lines (SPL). Work in that area could be useful in the sense that the SPLs
+This is more about using knowledge representation to model
+[software product lines (SPL)](https://en.wikipedia.org/wiki/Software_product_line).
+Work in that area could be useful in the sense that the SPLs
 represent a system.
