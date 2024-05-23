@@ -35,3 +35,7 @@ This is more about using knowledge representation to model
 [software product lines (SPL)](https://en.wikipedia.org/wiki/Software_product_line).
 Work in that area could be useful in the sense that the SPLs
 represent a system.
+
+# TODO
+
+- Show differing levels of "declarativity" in various CM systems.
