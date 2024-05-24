@@ -39,3 +39,5 @@ represent a system.
 # TODO
 
 - Show differing levels of "declarativity" in various CM systems.
+- Show examples of *a priori*  and *a posteriori* knowledge
+  with these systems.
