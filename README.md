@@ -41,3 +41,5 @@ represent a system.
 - Show differing levels of "declarativity" in various CM systems.
 - Show examples of *a priori*  and *a posteriori* knowledge
   with these systems.
+- Can the idea of entities with types (things not strings) be used for modeling
+  systems? Do existing CM systems provide this?
