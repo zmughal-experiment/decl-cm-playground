@@ -42,4 +42,6 @@ represent a system.
 - Show examples of *a priori*  and *a posteriori* knowledge
   with these systems.
 - Can the idea of entities with types (things not strings) be used for modeling
-  systems? Do existing CM systems provide this?
+  systems? Do existing CM systems provide this? Technically, everything in a computer is
+  strings, but what I mean is that can one uniquely identify a particular
+  component?
