@@ -19,6 +19,7 @@ One approach that I'm thinking through is that CM systems could use a knowledge
 management system. This is already implemented in CFEngine 3 using Topic Maps
 [^cfengine-impl-km](https://docs.cfengine.com/docs/archive/manuals/st-knowledge.html)
 [^burgess-2009-km-and-promises](https://dl.ifip.org/db/conf/aims/aims2009/Burgess09.pdf)
+[^burgess-2010-notes-usenix-lisa-km-workshop](https://markburgess.org/blog_km.html)
 .
 What I am after here is not gathering facts about a running system, but
 capturing facts about what makes up a final system and all its components. To
