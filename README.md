@@ -23,6 +23,7 @@ management system. This is already implemented in CFEngine 3 using Topic Maps
 [^burgess-2009-nightmare-of-knowledge](https://markburgess.org/blog_dream.html)
 [^burgess-2012-scaffolding-of-knowledge](https://markburgess.org/blog_scaffold.html)
 [^burgess-2013-evo-of-cm-thinking](https://markburgess.org/blog_whyiscmknowledge.html)
+[^burgess-semantic-spacetimes](https://markburgess.org/spacetime.html)
 .
 What I am after here is not gathering facts about a running system, but
 capturing facts about what makes up a final system and all its components. To
