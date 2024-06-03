@@ -17,17 +17,35 @@ they can make the CM system less declarative.
 
 One approach that I'm thinking through is that CM systems could use a knowledge
 management system. This is already implemented in CFEngine 3 using Topic Maps
-[^cfengine-impl-km](https://docs.cfengine.com/docs/archive/manuals/st-knowledge.html)
-[^burgess-2009-km-and-promises](https://dl.ifip.org/db/conf/aims/aims2009/Burgess09.pdf)
-[^burgess-2010-notes-usenix-lisa-km-workshop](https://markburgess.org/blog_km.html)
-[^burgess-2009-nightmare-of-knowledge](https://markburgess.org/blog_dream.html)
-[^burgess-2012-scaffolding-of-knowledge](https://markburgess.org/blog_scaffold.html)
-[^burgess-2013-evo-of-cm-thinking](https://markburgess.org/blog_whyiscmknowledge.html)
-[^burgess-semantic-spacetimes](https://markburgess.org/spacetime.html)
+[^cfengine-impl-km]
+[^burgess-2009-km-and-promises]
+[^burgess-2010-notes-usenix-lisa-km-workshop]
+[^burgess-2009-nightmare-of-knowledge]
+[^burgess-2012-scaffolding-of-knowledge]
+[^burgess-2013-evo-of-cm-thinking]
+[^burgess-semantic-spacetimes]
 .
 What I am after here is not gathering facts about a running system, but
 capturing facts about what makes up a final system and all its components. To
 say it another way,  the knowledge here should be *a priori*.
+
+[^cfengine-impl-km]: [CFEngine docs: Implementing Knowledge Management](https://docs.cfengine.com/docs/archive/manuals/st-knowledge.html)
+
+[^burgess-2009-km-and-promises]: [Knowledge Management and Promises. by Mark Burgess (Ramin Sadre, Aiko Pras: Scalability of Networks and Services, Third International Conference on Autonomous Infrastructure, Management and Security, AIMS 2009, Enschede, The Netherlands, June 30-July 2, 2009. Proceedings. Springer, Lecture Notes in Computer Science 5637, ISBN: 978-3-642-02626-3)](https://dl.ifip.org/db/conf/aims/aims2009/Burgess09.pdf)
+
+[^burgess-2009-nightmare-of-knowledge]: [Mark Burgess Website - The Nightmare of Knowledge](https://markburgess.org/blog_dream.html)
+<!--<h2>The Nightmare of Knowledge</h2> <h3>September 27 2009</h3> <a href="blog_dream.html">Read more</a>-->
+
+[^burgess-2010-notes-usenix-lisa-km-workshop]: [Mark Burgess Website - Notes from the USENIX/LISA Knowledge Management Workshop](https://markburgess.org/blog_km.html)
+<!--<h2>LISA Knowledge Management Workshop</h2> <h3>13th December 2010</h3> href="blog_km.html">Read more</a>-->
+
+[^burgess-2012-scaffolding-of-knowledge]: [Mark Burgess Website - The Scaffolding of Knowledge (Beyond desired state configuration management, for the Third Wave)](https://markburgess.org/blog_scaffold.html)
+<!--<h2>The Scaffolding of Knowledge (Beyond desired state configuration management, for the Third Wave)</h2> <h3>5th April 2012</h3> <a href="blog_scaffold.html">Read more</a> -->
+
+[^burgess-2013-evo-of-cm-thinking]: [Mark Burgess Website - The evolution of configuration management thinking as a business problem (in 2 universes)](https://markburgess.org/blog_whyiscmknowledge.html)
+<!--<h2>The evolution of configuration management thinking as a business problem (in 2 universes)</h2> <h3>13 August 2013</h3> <a href="blog_whyiscmknowledge.html">Read more</a> -->
+
+[^burgess-semantic-spacetimes]: [Mark Burgess Website - Semantic Spacetime Project](https://markburgess.org/spacetime.html)
 
 This would give a hierarchical model along with dependencies and interfaces between
 the components. These dependencies and interfaces are important because it is
