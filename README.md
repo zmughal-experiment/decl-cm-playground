@@ -19,8 +19,8 @@ One approach that I'm thinking through is that CM systems could use a knowledge
 management system. This is already implemented in CFEngine 3 using Topic Maps
 [^cfengine-impl-km]
 [^burgess-2009-km-and-promises]
-[^burgess-2010-notes-usenix-lisa-km-workshop]
 [^burgess-2009-nightmare-of-knowledge]
+[^burgess-2010-notes-usenix-lisa-km-workshop]
 [^burgess-2012-scaffolding-of-knowledge]
 [^burgess-2013-evo-of-cm-thinking]
 [^burgess-semantic-spacetimes]
