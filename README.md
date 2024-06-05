@@ -45,7 +45,9 @@ say it another way,  the knowledge here should be *a priori*.
 [^burgess-2013-evo-of-cm-thinking]: [Mark Burgess Website - The evolution of configuration management thinking as a business problem (in 2 universes)](https://markburgess.org/blog_whyiscmknowledge.html)
 <!--<h2>The evolution of configuration management thinking as a business problem (in 2 universes)</h2> <h3>13 August 2013</h3> <a href="blog_whyiscmknowledge.html">Read more</a> -->
 
-[^burgess-semantic-spacetimes]: [Mark Burgess Website - Semantic Spacetime Project](https://markburgess.org/spacetime.html)
+[^burgess-semantic-spacetimes]: [Mark Burgess Website - Semantic Spacetime Project](https://markburgess.org/spacetime.html),
+[Semantic Spacetime and Promise Theory of Autonomous Networks - YouTube](https://www.youtube.com/watch?v=n81UP8BuOb8),
+[GitHub - markburgess/SemanticSpaceTime](https://github.com/markburgess/SemanticSpaceTime),
 
 This would give a hierarchical model along with dependencies and interfaces between
 the components. These dependencies and interfaces are important because it is
