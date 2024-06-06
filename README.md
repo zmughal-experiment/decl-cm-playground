@@ -48,6 +48,7 @@ say it another way,  the knowledge here should be *a priori*.
 [^burgess-semantic-spacetimes]: [Mark Burgess Website - Semantic Spacetime Project](https://markburgess.org/spacetime.html),
 [Semantic Spacetime and Promise Theory of Autonomous Networks - YouTube](https://www.youtube.com/watch?v=n81UP8BuOb8),
 [GitHub - markburgess/SemanticSpaceTime](https://github.com/markburgess/SemanticSpaceTime),
+[List: Semantic Spacetime and Data Analytics | Curated by Mark Burgess | Medium](https://mark-burgess-oslo-mb.medium.com/list/semantic-spacetime-and-data-analytics-28e9649c0ade)
 
 This would give a hierarchical model along with dependencies and interfaces between
 the components. These dependencies and interfaces are important because it is
