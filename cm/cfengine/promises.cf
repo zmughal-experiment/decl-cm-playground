@@ -1,0 +1,25 @@
+body common control
+{
+  bundlesequence => { "packages" };
+  inputs => {
+    "$(sys.masterdir)/lib/stdlib.cf", # /var/lib/cfengine3/masterfiles/lib/stdlib.cf
+
+    #"lib/stdlib.cf",            # FAIL : /var/cfengine/masterfiles/lib/stdlib.cf
+    #"$(sys.libdir)/stdlib.cf",  # FAIL : /var/lib/cfengine3/inputs/lib/stdlib.cf
+  };
+}
+
+bundle agent packages
+{
+  vars:
+      "desired_packages"
+          comment => "the packages that should be available",
+          slist => { "apache2", };
+
+  packages:
+    "$(desired_packages)"
+      package_policy => "add",
+      package_module => apt_get;
+      # Infer package manager (e.g. apt, yum) from the OS.
+      #package_method => generic;
+}
