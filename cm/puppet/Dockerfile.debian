@@ -1,0 +1,9 @@
+FROM debian:latest
+
+RUN apt-get update && apt-get install -y puppet
+
+COPY cm/puppet/manifests /etc/puppet/manifests
+
+CMD \
+  puppet apply /etc/puppet/manifests/site.pp; \
+  exec apache2ctl -v;
