@@ -1,0 +1,11 @@
+FROM debian:latest
+
+RUN apt-get update && apt-get install -y curl
+
+RUN curl -L https://omnitruck.chef.io/install.sh | bash
+
+COPY cm/chef/cookbooks /cookbooks
+
+CMD \
+  chef-client --local-mode --runlist recipe[test-cookbook]; \
+  exec apache2ctl -v;
