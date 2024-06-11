@@ -1,6 +1,8 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get install -y ansible
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ansible \
+  && which ansible-playbook
 
 COPY cm/ansible/playbook.yml /playbook.yml
 

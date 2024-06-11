@@ -1,6 +1,8 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get install -y puppet
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends puppet \
+  && which puppet
 
 COPY cm/puppet/manifests /etc/puppet/manifests
 

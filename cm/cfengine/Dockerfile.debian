@@ -1,7 +1,8 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get install -y cfengine3 \
-	&& ln -s /usr/bin/python3 /usr/bin/cfengine-selected-python
+RUN apt-get update && apt-get install -y --no-install-recommends cfengine3 \
+  && ln -s /usr/bin/python3 /usr/bin/cfengine-selected-python \
+  && which cf-agent
 
 # <https://cfengine.com/cfengine-linux-distros/>
 #RUN apt-get update && apt-get install -y wget python3 \
