@@ -1,0 +1,12 @@
+#!/usr/bin/env bass
+
+(def apache2
+  (from (linux/debian)
+    ($ apt-get update)
+    ($ apt-get install -y --no-install-recommends apache2)))
+
+(defn main []
+  (run
+    (from apache2
+      ($ apache2ctl -v)))
+  (emit apache2 *stdout*))

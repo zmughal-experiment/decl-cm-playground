@@ -1,0 +1,11 @@
+FROM debian:stable-slim
+
+# https://github.com/vito/bass/releases/download/v0.12.0/bass.linux-amd64.tgz
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates docker.io \
+    && curl -L https://github.com/vito/bass/releases/latest/download/bass.linux-amd64.tgz | tar -xz \
+    && mv bass /usr/local/bin/
+
+COPY build-automation/bass/apache2.bass /apache2.bass
+
+CMD ["bass", "/apache2.bass"]
