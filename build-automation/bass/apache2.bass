@@ -1,7 +1,7 @@
 #!/usr/bin/env bass
 
 (def apache2
-  (from (linux/debian)
+  (from (linux/debian :stable-slim)
     ($ apt-get update)
     ($ apt-get install -y --no-install-recommends apache2)))
 
