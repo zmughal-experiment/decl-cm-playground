@@ -49,6 +49,11 @@ say it another way,  the knowledge here should be *a priori*.
 [Semantic Spacetime and Promise Theory of Autonomous Networks - YouTube](https://www.youtube.com/watch?v=n81UP8BuOb8),
 [GitHub - markburgess/SemanticSpaceTime](https://github.com/markburgess/SemanticSpaceTime),
 [List: Semantic Spacetime and Data Analytics | Curated by Mark Burgess | Medium](https://mark-burgess-oslo-mb.medium.com/list/semantic-spacetime-and-data-analytics-28e9649c0ade)
+\
+[(1907.01796) Koalja: from Data Plumbing to Smart Workspaces in the Extended Cloud](https://arxiv.org/abs/1907.01796),
+[GitHub - AljabrIO/koalja-operator: Development for Koalja - Smart data pipelines](https://github.com/AljabrIO/koalja-operator)
+[List: Data pipelines | Curated by Mark Burgess | Medium](https://mark-burgess-oslo-mb.medium.com/list/data-pipelines-fed29bd4d9d4)
+
 
 This would give a hierarchical model along with dependencies and interfaces between
 the components. These dependencies and interfaces are important because it is
