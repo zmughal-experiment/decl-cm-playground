@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends cfengine3 \
 #        && apt-get update && apt-get install cfengine-community \
 #        && ln -s /usr/bin/python3 /var/cfengine/bin/cfengine-selected-python
 
-COPY scenario/cm/cfengine/promises.cf /var/cfengine/masterfiles/
+COPY scenario/configuration-management/cfengine/promises.cf /var/cfengine/masterfiles/
 
 #CMD ["cf-agent", "-Kf", "/var/cfengine/masterfiles/promises.cf"]
 CMD \

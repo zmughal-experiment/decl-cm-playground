@@ -20,9 +20,9 @@ nop:
 	@true
 
 INCLUDES := \
-	$(THIS_DIR)/scenario/cm/ansible/Makefile  \
-	$(THIS_DIR)/scenario/cm/cfengine/Makefile \
-	$(THIS_DIR)/scenario/cm/chef/Makefile     \
-	$(THIS_DIR)/scenario/cm/puppet/Makefile   #
+	$(THIS_DIR)/scenario/configuration-management/ansible/Makefile  \
+	$(THIS_DIR)/scenario/configuration-management/cfengine/Makefile \
+	$(THIS_DIR)/scenario/configuration-management/chef/Makefile     \
+	$(THIS_DIR)/scenario/configuration-management/puppet/Makefile   #
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))

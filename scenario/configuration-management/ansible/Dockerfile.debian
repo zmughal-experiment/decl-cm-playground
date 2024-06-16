@@ -4,7 +4,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends ansible \
   && which ansible-playbook
 
-COPY scenario/cm/ansible/playbook.yml /playbook.yml
+COPY scenario/configuration-management/ansible/playbook.yml /playbook.yml
 
 CMD \
   ansible-playbook /playbook.yml; \
