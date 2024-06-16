@@ -5,7 +5,7 @@ RUN apt-get update \
   && curl -L https://omnitruck.chef.io/install.sh | bash \
   && which chef-client
 
-COPY cm/chef/cookbooks /cookbooks
+COPY scenario/cm/chef/cookbooks /cookbooks
 
 CMD \
   chef-client --local-mode --runlist recipe[test-cookbook]; \
