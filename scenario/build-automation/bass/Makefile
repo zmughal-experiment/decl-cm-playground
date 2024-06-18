@@ -1,3 +1,4 @@
+$(eval $(init-include))
 THIS_DIR := $(call get-relative-makefile-dir)
 
 # Use the Docker socket.
