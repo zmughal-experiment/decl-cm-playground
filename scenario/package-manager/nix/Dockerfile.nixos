@@ -1,0 +1,7 @@
+FROM nixos/nix
+
+COPY scenario/package-manager/nix/default.nix /build/default.nix
+
+RUN nix-build /build/default.nix
+
+CMD ["/result/bin/httpd", "-v"]

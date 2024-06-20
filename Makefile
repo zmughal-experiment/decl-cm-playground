@@ -10,6 +10,7 @@ TARGETS := \
        chef \
        puppet \
        bass \
+       nix \
        #
 
 .PHONY: all $(TARGETS)
@@ -24,6 +25,8 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/configuration-management/cfengine/Makefile \
 	$(THIS_DIR)/scenario/configuration-management/chef/Makefile     \
 	$(THIS_DIR)/scenario/configuration-management/puppet/Makefile   \
-	$(THIS_DIR)/scenario/build-automation/bass/Makefile             #
+	$(THIS_DIR)/scenario/build-automation/bass/Makefile             \
+	$(THIS_DIR)/scenario/package-manager/nix/Makefile               \
+	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))
