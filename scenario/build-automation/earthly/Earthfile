@@ -1,0 +1,10 @@
+VERSION 0.6
+FROM debian:stable-slim
+WORKDIR /earthly
+
+build:
+    RUN -- apt-get update && apt-get install -y --no-install-recommends apache2
+
+test:
+    FROM +build
+    RUN --no-cache -- /usr/sbin/apache2ctl -v

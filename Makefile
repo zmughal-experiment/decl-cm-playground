@@ -10,6 +10,7 @@ TARGETS := \
        chef \
        puppet \
        bass \
+       earthly \
        nix \
        #
 
@@ -26,6 +27,7 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/configuration-management/chef/Makefile     \
 	$(THIS_DIR)/scenario/configuration-management/puppet/Makefile   \
 	$(THIS_DIR)/scenario/build-automation/bass/Makefile             \
+	$(THIS_DIR)/scenario/build-automation/earthly/Makefile          \
 	$(THIS_DIR)/scenario/package-manager/nix/Makefile               \
 	#
 

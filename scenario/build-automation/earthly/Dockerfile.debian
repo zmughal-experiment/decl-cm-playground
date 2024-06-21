@@ -1,0 +1,15 @@
+FROM debian:stable-slim
+
+# From:
+# - <https://earthly.dev/get-earthly>,
+# - <https://docs.earthly.dev/docs/misc/alt-installation>
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates docker.io git \
+    && curl -L https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64 -o /usr/local/bin/earthly \
+    && chmod +x /usr/local/bin/earthly
+    # /usr/local/bin/earthly bootstrap --with-autocomplete
+
+COPY scenario/build-automation/earthly/Earthfile /Earthfile
+
+ENTRYPOINT ["earthly"]
+CMD ["--ci", "+build"]
