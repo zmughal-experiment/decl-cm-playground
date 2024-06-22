@@ -1,0 +1,7 @@
+task installApache2(type: Exec) {
+    commandLine 'sh', '-c', '''
+        |apt-get update \\
+        |&& apt-get install -y --no-install-recommends apache2 \\
+        |&& apache2ctl -v
+        |'''.stripMargin()
+}
