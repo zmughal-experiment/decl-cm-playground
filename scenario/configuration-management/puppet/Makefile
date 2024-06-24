@@ -4,7 +4,7 @@ THIS_DIR := $(call get-relative-makefile-dir)
 
 define RULE :=
 puppet:
-	docker build -t puppet-test -f $(THIS_DIR)/Dockerfile.debian .
+	docker build -t puppet-test --build-arg THIS_DIR=$(THIS_DIR) -f $(THIS_DIR)/Dockerfile.debian .
 	docker run --rm puppet-test
 endef
 

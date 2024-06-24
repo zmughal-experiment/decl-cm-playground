@@ -5,7 +5,8 @@ RUN curl -fsSL -o /usr/share/keyrings/salt-archive-keyring.gpg https://repo.salt
 RUN echo "deb [signed-by=/usr/share/keyrings/salt-archive-keyring.gpg] https://repo.saltproject.io/py3/debian/11/amd64/latest bullseye main" > /etc/apt/sources.list.d/salt.list
 RUN apt-get update && apt-get install -y --no-install-recommends salt-minion
 
-COPY scenario/configuration-management/saltstack/apache2.sls /srv/salt/apache2.sls
-COPY scenario/configuration-management/saltstack/top.sls /srv/salt/top.sls
+ARG THIS_DIR
+COPY ${THIS_DIR}/apache2.sls /srv/salt/apache2.sls
+COPY ${THIS_DIR}/top.sls /srv/salt/top.sls
 
 CMD salt-call --local state.apply

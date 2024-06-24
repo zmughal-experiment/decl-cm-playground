@@ -1,6 +1,7 @@
 FROM gradle:jdk11
 
 WORKDIR /app
-COPY scenario/build-automation/gradle/build.gradle .
+ARG THIS_DIR
+COPY ${THIS_DIR}/build.gradle .
 
 CMD ["gradle", "installApache2"]

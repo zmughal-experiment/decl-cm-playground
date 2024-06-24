@@ -4,7 +4,8 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends puppet \
   && which puppet
 
-COPY scenario/configuration-management/puppet/manifests /etc/puppet/manifests
+ARG THIS_DIR
+COPY ${THIS_DIR}/manifests /etc/puppet/manifests
 
 CMD \
   puppet apply /etc/puppet/manifests/site.pp; \

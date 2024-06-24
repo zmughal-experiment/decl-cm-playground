@@ -4,7 +4,7 @@ THIS_DIR := $(call get-relative-makefile-dir)
 
 define RULE :=
 cfengine:
-	docker build -t cfengine-test -f $(THIS_DIR)/Dockerfile.debian .
+	docker build -t cfengine-test --build-arg THIS_DIR=$(THIS_DIR) -f $(THIS_DIR)/Dockerfile.debian .
 	docker run --rm cfengine-test
 endef
 

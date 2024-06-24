@@ -5,7 +5,7 @@ THIS_DIR := $(call get-relative-makefile-dir)
 # See <https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/>.
 define RULE :=
 earthly:
-	docker build -t earthly-test -f $(THIS_DIR)/Dockerfile.debian .
+	docker build -t earthly-test --build-arg THIS_DIR=$(THIS_DIR) -f $(THIS_DIR)/Dockerfile.debian .
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		earthly-test --ci +build

@@ -9,7 +9,8 @@ RUN apt-get update \
     && chmod +x /usr/local/bin/earthly
     # /usr/local/bin/earthly bootstrap --with-autocomplete
 
-COPY scenario/build-automation/earthly/Earthfile /Earthfile
+ARG THIS_DIR
+COPY ${THIS_DIR}/Earthfile /Earthfile
 
 ENTRYPOINT ["earthly"]
 CMD ["--ci", "+build"]

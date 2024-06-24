@@ -1,6 +1,7 @@
 FROM nixos/nix
 
-COPY scenario/package-manager/nix/default.nix /build/default.nix
+ARG THIS_DIR
+COPY ${THIS_DIR}/default.nix /build/default.nix
 
 RUN nix-build /build/default.nix
 

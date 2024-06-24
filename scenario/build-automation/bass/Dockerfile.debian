@@ -6,6 +6,7 @@ RUN apt-get update \
     && curl -L https://github.com/vito/bass/releases/latest/download/bass.linux-amd64.tgz | tar -xz \
     && mv bass /usr/local/bin/
 
-COPY scenario/build-automation/bass/apache2.bass /apache2.bass
+ARG THIS_DIR
+COPY ${THIS_DIR}/apache2.bass /apache2.bass
 
 CMD ["bass", "/apache2.bass"]
