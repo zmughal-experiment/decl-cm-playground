@@ -1,5 +1,6 @@
 # NOTE: GNU Makefile
-include inc/common.mk
+TOP := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+include $(TOP)/inc/common.mk
 $(eval $(init-first))
 
 THIS_DIR := $(call get-relative-makefile-dir)
