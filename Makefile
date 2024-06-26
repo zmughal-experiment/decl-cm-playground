@@ -1,5 +1,5 @@
 # NOTE: GNU Makefile
-TOP := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+TOP := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 include $(TOP)/inc/common.mk
 $(eval $(init-first))
 
