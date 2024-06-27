@@ -1,0 +1,52 @@
+$(eval $(init-include))
+THIS_DIR := $(call get-relative-makefile-dir)
+
+export MY_BAZEL_OUTPUT_ROOT := $(TOP)/output/$(THIS_DIR)
+#DOCKER_BAZEL_OUTPUT  := /home/ubuntu/.cache/bazel/_bazel_ubuntu
+DOCKER_BAZEL_OUTPUT  := /bazel-output-root
+DOCKER_UID := $(shell id -u)
+
+define PARALLEL_RENAME_PERL_CODE :=
+$$_ = readlink($$_);           $\
+s,^\Q$$ENV{FROM}\E/,$$ENV{TO}/,
+endef
+
+define DEB_PACKAGE_LOCK_FILE
+{ "packages": [], "version": 1 }
+endef
+
+# Requires:
+# mkdir, echo, docker, find, parallel, rm
+define RULE :=
+bazel:
+bazel:
+	mkdir -p $(MY_BAZEL_OUTPUT_ROOT)
+	echo '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
+	docker run --rm \
+		-v $(TOP)/$(THIS_DIR)/debian_snapshot:/workspace    \
+		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
+		-u $(DOCKER_UID)                                    \
+		-w /workspace                                       \
+		gcr.io/bazel-public/bazel:latest                    \
+			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
+			run @bullseye//:lock
+	docker run --rm \
+		-v $(TOP)/$(THIS_DIR)/debian_snapshot:/workspace    \
+		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
+		-u $(DOCKER_UID)                                    \
+		-w /workspace                                       \
+		gcr.io/bazel-public/bazel:latest                    \
+			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
+			build //...
+	export FROM="$(DOCKER_BAZEL_OUTPUT)" TO="$(MY_BAZEL_OUTPUT_ROOT)"; \
+		find $(THIS_DIR)/debian_snapshot \
+			-type l -name 'bazel-*'  \
+			| parallel 'ln -nsf $\
+				{= $(call escape-dollar,$(PARALLEL_RENAME_PERL_CODE)) =} $\
+				{}'
+	docker load --input $(THIS_DIR)/debian_snapshot/bazel-bin/tarball/tarball.tar
+	docker run --rm -it distroless/test:latest bash --version
+	rm $(THIS_DIR)/debian_snapshot/bullseye.lock.json
+endef
+
+$(eval $(RULE))

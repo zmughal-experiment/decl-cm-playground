@@ -54,3 +54,8 @@ $(if $(MAKEFILE_$(CURRENT_MAKEFILE)_RELATIVE_DIR),,$\
 )$\
 $(MAKEFILE_$(CURRENT_MAKEFILE)_RELATIVE_DIR)
 endef
+
+# $(call escape-dollar,$(VAR_TO_ESCAPE))
+define escape-dollar
+$(subst $$,$$$$,$1)
+endef

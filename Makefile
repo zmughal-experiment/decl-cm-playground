@@ -12,6 +12,7 @@ TARGETS :=         \
        puppet      \
        saltstack   \
        bass        \
+       bazel       \
        earthly     \
        gradle      \
        nix         \
@@ -31,6 +32,7 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/configuration-management/puppet/Makefile      \
 	$(THIS_DIR)/scenario/configuration-management/saltstack/Makefile   \
 	$(THIS_DIR)/scenario/build-automation/bass/Makefile                \
+	$(THIS_DIR)/scenario/build-automation/bazel/Makefile               \
 	$(THIS_DIR)/scenario/build-automation/earthly/Makefile             \
 	$(THIS_DIR)/scenario/build-automation/gradle/Makefile              \
 	$(THIS_DIR)/scenario/package-manager/nix/Makefile                  \
