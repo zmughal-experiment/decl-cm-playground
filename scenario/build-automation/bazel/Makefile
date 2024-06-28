@@ -16,11 +16,12 @@ define DEB_PACKAGE_LOCK_FILE
 endef
 
 # Requires:
-# mkdir, echo, docker, find, parallel, rm
+# mkdir, echo, docker, find, parallel, ln, rm
 define RULE :=
 bazel:
 bazel:
 	mkdir -p $(MY_BAZEL_OUTPUT_ROOT)
+	# Create Debian package lock file
 	echo '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
 	docker run --rm \
 		-v $(TOP)/$(THIS_DIR)/debian_snapshot:/workspace    \
@@ -30,6 +31,7 @@ bazel:
 		gcr.io/bazel-public/bazel:latest                    \
 			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
 			run @bullseye//:lock
+	# Create image
 	docker run --rm \
 		-v $(TOP)/$(THIS_DIR)/debian_snapshot:/workspace    \
 		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
@@ -38,14 +40,16 @@ bazel:
 		gcr.io/bazel-public/bazel:latest                    \
 			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
 			build //...
+	# Relink symlinks from Docker to host
 	export FROM="$(DOCKER_BAZEL_OUTPUT)" TO="$(MY_BAZEL_OUTPUT_ROOT)"; \
 		find $(THIS_DIR)/debian_snapshot \
 			-type l -name 'bazel-*'  \
 			| parallel 'ln -nsf $\
 				{= $(call escape-dollar,$(PARALLEL_RENAME_PERL_CODE)) =} $\
 				{}'
+	# Load Docker image
 	docker load --input $(THIS_DIR)/debian_snapshot/bazel-bin/tarball/tarball.tar
-	docker run --rm -it distroless/test:latest bash --version
+	docker run --rm -it distroless/test:latest apache2ctl -v
 	rm $(THIS_DIR)/debian_snapshot/bullseye.lock.json
 endef
 

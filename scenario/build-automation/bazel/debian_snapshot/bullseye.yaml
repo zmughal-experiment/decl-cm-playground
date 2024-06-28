@@ -33,3 +33,5 @@ packages:
   - "perl"
   # test cacerts() compatibility
   - "ca-certificates"
+  # needed for apache2 test
+  - "apache2"

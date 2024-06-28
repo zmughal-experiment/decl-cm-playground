@@ -21,6 +21,13 @@ passwd(
             "shell": "/usr/sbin/nologin",
             "username": "_apt",
         },
+        {
+            "uid": 33,
+            "gid": 33,
+            "home": "/var/www",
+            "shell": "/usr/sbin/nologin",
+            "username": "www-data",
+        },
     ],
 )
 
@@ -55,14 +62,15 @@ cacerts(
 )
 
 PACKAGES = [
-    "@bullseye//ncurses-base",
-    "@bullseye//libncurses6",
-    "@bullseye//tzdata",
+    #"@bullseye//ncurses-base",
+    #"@bullseye//libncurses6",
+    #"@bullseye//tzdata",
     "@bullseye//bash",
     "@bullseye//coreutils",
-    "@bullseye//dpkg",
-    "@bullseye//apt",
-    "@bullseye//perl",
+    #"@bullseye//dpkg",
+    #"@bullseye//apt",
+    #"@bullseye//perl",
+    "@bullseye//apache2",
 ]
 
 # Creates /var/lib/dpkg/status with installed package information.
