@@ -15,6 +15,7 @@ TARGETS :=         \
        bazel       \
        earthly     \
        gradle      \
+       maven       \
        nix         \
        #
 
@@ -35,6 +36,7 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/build-automation/bazel/Makefile               \
 	$(THIS_DIR)/scenario/build-automation/earthly/Makefile             \
 	$(THIS_DIR)/scenario/build-automation/gradle/Makefile              \
+	$(THIS_DIR)/scenario/build-automation/maven/Makefile               \
 	$(THIS_DIR)/scenario/package-manager/nix/Makefile                  \
 	#
 

@@ -1,0 +1,7 @@
+FROM maven:3-jdk-11
+
+WORKDIR /app
+ARG THIS_DIR
+COPY ${THIS_DIR}/pom.xml .
+
+CMD ["mvn", "exec:exec"]
