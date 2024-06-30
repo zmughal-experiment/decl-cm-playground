@@ -17,6 +17,7 @@ TARGETS :=         \
        gradle      \
        maven       \
        nix         \
+       terraform   \
        #
 
 .PHONY: all $(TARGETS)
@@ -38,6 +39,7 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/build-automation/gradle/Makefile              \
 	$(THIS_DIR)/scenario/build-automation/maven/Makefile               \
 	$(THIS_DIR)/scenario/package-manager/nix/Makefile                  \
+	$(THIS_DIR)/scenario/infrastructure-as-code/terraform/Makefile     \
 	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))

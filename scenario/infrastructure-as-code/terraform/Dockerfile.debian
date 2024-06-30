@@ -1,0 +1,15 @@
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates unzip
+RUN curl -fsSL https://releases.hashicorp.com/terraform/1.0.11/terraform_1.0.11_linux_amd64.zip -o terraform.zip \
+    && unzip terraform.zip \
+    && mv terraform /usr/local/bin/ \
+    && rm terraform.zip
+
+WORKDIR /terraform
+ARG THIS_DIR
+COPY ${THIS_DIR}/main.tf .
+
+CMD \
+  terraform init \
+  && terraform apply -auto-approve
