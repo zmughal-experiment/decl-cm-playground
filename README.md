@@ -76,3 +76,29 @@ represent a system.
   systems? Do existing CM systems provide this? Technically, everything in a computer is
   strings, but what I mean is that can one uniquely and semantically identify a
   particular component?
+
+# Scenarios
+
+## build-automation
+
+- [bass](scenario/build-automation/bass)
+- [bazel](scenario/build-automation/bazel)
+- [earthly](scenario/build-automation/earthly)
+- [gradle](scenario/build-automation/gradle)
+- [maven](scenario/build-automation/maven)
+
+## configuration-management
+
+- [ansible](scenario/configuration-management/ansible)
+- [cfengine](scenario/configuration-management/cfengine)
+- [chef](scenario/configuration-management/chef)
+- [puppet](scenario/configuration-management/puppet)
+- [saltstack](scenario/configuration-management/saltstack)
+
+## infrastructure-as-code
+
+- [terraform](scenario/infrastructure-as-code/terraform)
+
+## package-manager
+
+- [nix](scenario/package-manager/nix)
