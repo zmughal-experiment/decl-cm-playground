@@ -81,24 +81,24 @@ represent a system.
 
 ## build-automation
 
-- [bass](scenario/build-automation/bass)
-- [bazel](scenario/build-automation/bazel)
-- [earthly](scenario/build-automation/earthly)
-- [gradle](scenario/build-automation/gradle)
-- [maven](scenario/build-automation/maven)
+- [bass](scenario/build-automation/bass/index.md)
+- [bazel](scenario/build-automation/bazel/index.md)
+- [earthly](scenario/build-automation/earthly/index.md)
+- [gradle](scenario/build-automation/gradle/index.md)
+- [maven](scenario/build-automation/maven/index.md)
 
 ## configuration-management
 
-- [ansible](scenario/configuration-management/ansible)
-- [cfengine](scenario/configuration-management/cfengine)
-- [chef](scenario/configuration-management/chef)
-- [puppet](scenario/configuration-management/puppet)
-- [saltstack](scenario/configuration-management/saltstack)
+- [ansible](scenario/configuration-management/ansible/index.md)
+- [cfengine](scenario/configuration-management/cfengine/index.md)
+- [chef](scenario/configuration-management/chef/index.md)
+- [puppet](scenario/configuration-management/puppet/index.md)
+- [saltstack](scenario/configuration-management/saltstack/index.md)
 
 ## infrastructure-as-code
 
-- [terraform](scenario/infrastructure-as-code/terraform)
+- [terraform](scenario/infrastructure-as-code/terraform/index.md)
 
 ## package-manager
 
-- [nix](scenario/package-manager/nix)
+- [nix](scenario/package-manager/nix/index.md)
