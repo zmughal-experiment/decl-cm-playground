@@ -1,0 +1,7 @@
+# <https://cfengine.com/cfengine-linux-distros/>
+#RUN apt-get update && apt-get install -y wget python3 \
+#        && wget -qO- https://cfengine-package-repos.s3.amazonaws.com/pub/gpg.key | tee /etc/apt/trusted.gpg.d/cfengine-as.asc \
+#        &&  echo "deb https://cfengine-package-repos.s3.amazonaws.com/pub/apt/packages stable main" > \
+#                /etc/apt/sources.list.d/cfengine-community.list \
+#        && apt-get update && apt-get install cfengine-community \
+#        && ln -s /usr/bin/python3 /var/cfengine/bin/cfengine-selected-python
