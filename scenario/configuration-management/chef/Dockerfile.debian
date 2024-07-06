@@ -1,13 +1,17 @@
-FROM debian:stable-slim
+FROM buildpack-deps:stable-curl AS base
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends curl ca-certificates \
-  && curl -L https://omnitruck.chef.io/install.sh | bash \
+RUN \
+     curl -L https://omnitruck.chef.io/install.sh | bash \
   && which chef-client
 
+FROM debian:stable-slim
+
 ARG THIS_DIR
+
+COPY --from=base /opt/chef /opt/chef
+
 COPY ${THIS_DIR}/cookbooks /cookbooks
 
 CMD \
-  chef-client --local-mode --runlist recipe[test-cookbook]; \
+  /opt/chef/bin/chef-client --local-mode --runlist recipe[test-cookbook]; \
   exec apache2ctl -v;
