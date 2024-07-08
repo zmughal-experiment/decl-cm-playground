@@ -12,6 +12,7 @@ COPY --from=base /opt/chef /opt/chef
 
 COPY ${THIS_DIR}/cookbooks /cookbooks
 
+ENV CHEF_LICENSE=accept
 CMD \
   /opt/chef/bin/chef-client --local-mode --runlist recipe[test-cookbook]; \
   exec apache2ctl -v;
