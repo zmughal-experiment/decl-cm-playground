@@ -15,3 +15,6 @@
     + <https://lists.freedesktop.org/archives/distributions/2011-April/000557.html>
     + <https://lists.freedesktop.org/archives/distributions/2012-January/000610.html>
     + <https://lists.freedesktop.org/archives/distributions/2011-February/000468.html>
+- whohas
+  * <http://www.philippwesche.org/200811/whohas/intro.html>
+  * <https://github.com/whohas/whohas>
