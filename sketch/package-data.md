@@ -4,6 +4,15 @@
   + <https://wiki.debian.org/debian/upstream>
   + <https://dep-team.pages.debian.net/deps/dep12/>
 
+```sql
+-- DuckDB
+-- $ duckdb
+
+.read 'sketch/debian-udd/attach-pg-udd-mirror.duckdb.sql'
+
+.read 'sketch/debian-udd/sources-tesseract-lang.duckdb.sql'
+
+```
 
 * <https://wiki.debian.org/RDF>
   + <https://packages.qa.debian.org/common/RDF.html>
