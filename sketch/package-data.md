@@ -14,6 +14,14 @@
 
 ```
 
+```sql
+-- PostgreSQL
+-- $ psql "postgresql://udd-mirror:udd-mirror@udd-mirror.debian.net/udd"
+
+\i sketch/debian-udd/upstream-watch_file.postgres.sql
+
+```
+
 * <https://wiki.debian.org/RDF>
   + <https://packages.qa.debian.org/common/RDF.html>
   + <https://wiki.debian.org/qa.debian.org/pts/RdfInterface>
