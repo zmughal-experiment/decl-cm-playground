@@ -5,6 +5,13 @@
 # Include and init guard in one.
 $(if $(__common_init_first_guard),$(error Should only include this file once),$(eval __common_init_first_guard :=))
 
+MAKEFLAGS += --warn-undefined-variables
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
+.SUFFIXES:
+
 # Uses expr(1).
 define get-including-makefile
 $(word $(shell expr $(words $(MAKEFILE_LIST)) - 1),$(MAKEFILE_LIST))
