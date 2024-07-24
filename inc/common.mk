@@ -5,6 +5,12 @@
 # Include and init guard in one.
 $(if $(__common_init_first_guard),$(error Should only include this file once),$(eval __common_init_first_guard :=))
 
+# GNU Makefile
+VERSION := $(shell $(MAKE) --version)
+ifneq ($(firstword $(VERSION)),GNU)
+$(error Use GNU Make)
+endif
+
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
