@@ -14,9 +14,12 @@ endif
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
 .SUFFIXES:
+
+MKDIR_P := mkdir -p
+ECHO    := echo
 
 # Uses expr(1).
 define get-including-makefile

@@ -20,7 +20,29 @@ TARGETS :=         \
        terraform   \
        #
 
-.PHONY: all $(TARGETS)
+.PHONY: help all $(TARGETS)
+
+
+define MESSAGE
+Targets for $(MAKE):
+
+endef
+
+define TARGETS_MESSAGE
+
+## Targets
+
+$(TARGETS)
+
+endef
+
+MESSAGE += $(TARGETS_MESSAGE)
+
+
+# Default target
+export MESSAGE
+help:
+	@$(ECHO) "$$MESSAGE"
 
 all: $(TARGETS)
 
