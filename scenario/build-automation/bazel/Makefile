@@ -16,13 +16,13 @@ define DEB_PACKAGE_LOCK_FILE
 endef
 
 # Requires:
-# mkdir, echo, docker, find, parallel, ln, rm
+# docker, find, parallel, ln, rm
 define RULE :=
 bazel:
-bazel:
-	mkdir -p $(MY_BAZEL_OUTPUT_ROOT)
+bazel: bin-guard-docker bin-guard-find bin-guard-parallel bin-guard-ln bin-guard-rm
+	$(MKDIR_P) $(MY_BAZEL_OUTPUT_ROOT)
 	# Create Debian package lock file
-	echo '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
+	$(ECHO) '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
 	docker run --rm \
 		-v $(TOP)/$(THIS_DIR)/debian_snapshot:/workspace    \
 		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
