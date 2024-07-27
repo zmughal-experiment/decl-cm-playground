@@ -22,7 +22,6 @@ TARGETS :=         \
 
 .PHONY: help all $(TARGETS)
 
-
 define MESSAGE
 Targets for $(MAKE):
 
@@ -46,6 +45,7 @@ help:
 
 all: $(TARGETS)
 
+.PHONY: nop
 nop:
 	@true
 

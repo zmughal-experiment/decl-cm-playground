@@ -1,7 +1,9 @@
 .PHONY: _env-guard _bin-guard
 
+# See more at
+# <https://stackoverflow.com/questions/10858261/how-to-abort-makefile-if-variable-not-set>
 env-guard-%: _env-guard
-	@ if [ "${${*}}" = "" ]; then \
+	@ if [ -z "${${*}}" ]; then \
 		echo "Environment variable $* not set"; \
 		exit 1; \
 	fi
