@@ -18,8 +18,14 @@ endef
 # Requires:
 # docker, find, parallel, ln, rm
 define RULE :=
+BAZEL_TARGET_BIN_GUARDS := \
+	bin-guard-docker \
+	bin-guard-find \
+	bin-guard-parallel \
+	bin-guard-ln \
+	bin-guard-rm
 bazel:
-bazel: bin-guard-docker bin-guard-find bin-guard-parallel bin-guard-ln bin-guard-rm
+bazel: $$(BAZEL_TARGET_BIN_GUARDS) ## Build Bazel Docker
 	$(MKDIR_P) $(MY_BAZEL_OUTPUT_ROOT)
 	# Create Debian package lock file
 	$(ECHO) '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
