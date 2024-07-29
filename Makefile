@@ -49,7 +49,7 @@ all: $(TARGETS)
 nop:
 	@true
 
-include $(TOP)/inc/guard.mk
+include $(THIS_DIR)/inc/guard.mk
 
 INCLUDES := \
 	$(THIS_DIR)/scenario/configuration-management/ansible/Makefile     \
