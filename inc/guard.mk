@@ -22,19 +22,19 @@
 #   @$(call _macro_env-guard-check-unset,$*)
 define _macro_env-guard-check-empty-or-unset
 	if [ -z "$${$1:-}" ]; then \
-		echo "Environment variable $* is empty or unset"; \
+		echo "Environment variable $1 is empty or unset"; \
 		$(if $(value 2),$2,false); \
 	fi
 endef
 define _macro_env-guard-check-unset
 	if [ -z "$${$1+defined}" ]; then \
-		echo "Environment variable $* is unset"; \
+		echo "Environment variable $1 is unset"; \
 		$(if $(value 2),$2,false); \
 	fi
 endef
 define _macro_env-guard-check-empty
 	if [ ! -z "$${$1+defined}" ] && [ -z "$${$1}" ]; then \
-		echo "Environment variable $* is empty"; \
+		echo "Environment variable $1 is empty"; \
 		$(if $(value 2),$2,false); \
 	fi
 endef
@@ -51,5 +51,5 @@ env-guard-%: _env-guard
 bin-guard-%: _bin-guard
 	@ if ! which "${*}" >/dev/null; then \
 		echo "Executable $* not found"; \
-		exit 1; \
+		false; \
 	fi
