@@ -18,6 +18,10 @@
 -- PostgreSQL
 -- $ psql "postgresql://udd-mirror:udd-mirror@udd-mirror.debian.net/udd"
 
+\pset pager off
+
+\i sketch/debian-udd/sources-tesseract-lang.postgres.sql
+
 \i sketch/debian-udd/upstream-watch_file.postgres.sql
 
 ```
