@@ -47,3 +47,5 @@
     * <https://tannewt.org/docs/shawcroft-thesis.pdf>
 * <https://github.com/iksaif/euscan>
     * <https://gitweb.gentoo.org/proj/euscan.git/log/>
+* <https://wiki.debian.org/debian/watch>
+  + <https://manpages.debian.org/stable/devscripts/uscan.1.en.html>
