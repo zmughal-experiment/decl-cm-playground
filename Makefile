@@ -41,7 +41,7 @@ MESSAGE += $(TARGETS_MESSAGE)
 export MESSAGE
 help: ## Show help
 	@$(ECHO) "$$MESSAGE"
-	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -HE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort -t: -k1,2 | cut -d: -f2- | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 all: $(TARGETS)
 
