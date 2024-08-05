@@ -1,4 +1,5 @@
 /output
+/work
 
 # Bazel symlinks
 bazel-bin
