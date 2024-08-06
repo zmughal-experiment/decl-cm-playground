@@ -4,6 +4,7 @@ include $(TOP)/inc/common.mk
 $(eval $(init-first))
 
 THIS_DIR := $(call get-relative-makefile-dir)
+TOP_DIR  := $(THIS_DIR)
 
 TARGETS :=         \
        ansible     \
@@ -64,6 +65,8 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/build-automation/maven/Makefile               \
 	$(THIS_DIR)/scenario/package-manager/nix/Makefile                  \
 	$(THIS_DIR)/scenario/infrastructure-as-code/terraform/Makefile     \
+	\
+	$(THIS_DIR)/strategy/debian-udd/Makefile                           \
 	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))

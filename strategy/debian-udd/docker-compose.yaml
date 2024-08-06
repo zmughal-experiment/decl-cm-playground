@@ -1,0 +1,25 @@
+# Environment variables:
+#
+# See `strategy/debian-udd/.env.template`.
+
+services:
+  udd:
+    # <https://salsa.debian.org/qa/udd/-/blob/master/scripts/recreate-db?ref_type=heads>
+    image: postgres:13
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    volumes:
+      - ${DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR:-./work/postgres/data}:/var/lib/postgresql/data
+      - ${DEBIAN_UDD_DUMP_FILE:?Need to define dump file}:/dump/udd.dump
+      - ${THIS_DIR_ABSPATH:?Need to set THIS_DIR_ABSPATH}/bin/db-dump-restore:/script/db-dump-restore
+      ## set shared memory limit when deploy via swarm stack
+      #- type: tmpfs
+      #  target: /dev/shm
+      #  tmpfs:
+      #    size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: ${DEBIAN_UDD_PGPASSWORD:-password}
+      DEBIAN_UDD_PGDATABASE: ${DEBIAN_UDD_PGDATABASE:-udd}
+    ports:
+      - "${DEBIAN_UDD_PGPORT:-5432}:5432"

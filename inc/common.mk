@@ -19,6 +19,7 @@ SHELL := bash
 .SUFFIXES:
 
 MKDIR_P := mkdir -p
+CP      := cp
 ECHO    := echo
 
 # Uses expr(1).

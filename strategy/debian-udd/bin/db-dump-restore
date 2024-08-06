@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+set -x
+set -euo pipefail
+
+# DEFAULTS
+DB_USER="${PGUSER:-postgres}"
+DB_NAME="${DEBIAN_UDD_PGDATABASE:-udd}"
+
+create_database() {
+	echo "Creating database '$DB_NAME'" >&2
+
+	if echo "$DB_NAME" | grep -qF '"'; then
+		# Double quotes would have to be escaped by doubling the
+		# character (e.g., "one""two").
+		echo "Database name can not contain double quote" >&2
+		exit 1
+	fi
+
+	export CREATE_DATABASE="$(cat <<EOF
+		SELECT
+			\$SQL\$
+			CREATE DATABASE
+				"${DB_NAME}"
+			WITH
+				TEMPLATE = template0
+				ENCODING = 'SQL_ASCII'
+			\$SQL\$
+		WHERE NOT EXISTS (
+			SELECT
+			FROM pg_database
+			WHERE datname = \$\$${DB_NAME}\$\$
+		)\\gexec
+EOF
+	)"
+
+	echo "$CREATE_DATABASE" | psql -U ${DB_USER}
+}
+
+install_extensions() {
+	if [ -z "$PG_MAJOR" ]; then
+		echo "Must set PG_MAJOR"
+		exit 1
+	fi
+
+	PACKAGE=postgresql-"$PG_MAJOR"-debversion
+
+	STATUS="$(dpkg-query -W --showformat='${db:Status-Status}' "$PACKAGE" 2>&1 || true)"
+	if [ "$STATUS" != 'installed' ]; then
+		env \
+			DEBIAN_FRONTEND=noninteractive \
+		apt-get update \
+			&& apt-get install -y --no-install-recommends \
+				"$PACKAGE"
+	fi
+}
+
+restore_database() {
+	local DUMP_FILE="$1"
+
+	echo 'CREATE EXTENSION debversion' \
+		| psql \
+			-U ${DB_USER} \
+			-d ${DB_NAME} \
+			-1 \
+			-v ON_ERROR_STOP=1
+
+	# pg_restore: options -1 or -j $(nproc) are incompatible
+	pg_restore \
+		-U ${DB_USER} \
+		-d ${DB_NAME} \
+		-j $(nproc)   \
+		--verbose \
+		"$DUMP_FILE"
+}
+
+main() {
+	## For debugging:
+	psql -U ${DB_USER} -c 'DROP DATABASE IF EXISTS '${DB_NAME}
+
+	create_database
+	install_extensions
+	restore_database /dump/udd.dump
+}
+
+main "$@"
