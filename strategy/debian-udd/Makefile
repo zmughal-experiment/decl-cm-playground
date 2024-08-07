@@ -65,20 +65,30 @@ $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
 
 DOCKER_PGDATA_DIR := $(TOP)/work/debian-udd/postgres/data
 
-shell_frag_set_DEBIAN_UDD_DUMP_FILE := DEBIAN_UDD_DUMP_FILE=`realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK)`
-shell_frag_set_DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR := DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR=$(DOCKER_PGDATA_DIR)
-shell_frag_set_THIS_DIR_ABSPATH := THIS_DIR_ABSPATH=`realpath $(THIS_DIR)`
+define shell_frag_set_DEBIAN_UDD_DUMP_FILE
+DEBIAN_UDD_DUMP_FILE=`realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK)`
+endef
+
+define shell_frag_set_DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR
+DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR=$(DOCKER_PGDATA_DIR)
+endef
+
+define shell_frag_set_THIS_DIR_ABSPATH
+THIS_DIR_ABSPATH=`realpath $(THIS_DIR)`
+endef
 
 DOCKER_COMPOSE_BASE_DEPS    := \
 	$(DOCKER_COMPOSE_BASE_FILES) $(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL) \
 	$(DOCKER_PGDATA_DIR) \
 	bin-guard-docker bin-guard-realpath
-DOCKER_COMPOSE_BASE_CMD     := \
-	env \
-		$(shell_frag_set_DEBIAN_UDD_DUMP_FILE)                \
-		$(shell_frag_set_DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR) \
-		$(shell_frag_set_THIS_DIR_ABSPATH)                    \
-	docker compose $(DOCKER_COMPOSE_BASE_ARGS)
+
+define DOCKER_COMPOSE_BASE_CMD
+env \
+	$(shell_frag_set_DEBIAN_UDD_DUMP_FILE)                \
+	$(shell_frag_set_DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR) \
+	$(shell_frag_set_THIS_DIR_ABSPATH)                    \
+docker compose $(DOCKER_COMPOSE_BASE_ARGS)
+endef
 
 $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
