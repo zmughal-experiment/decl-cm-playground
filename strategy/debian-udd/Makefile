@@ -16,7 +16,8 @@ P := $(PROJECT_NAME)
 	$(P)_docker-compose-up               \
 	$(P)_docker-compose-down             \
 	$(P)_docker-compose-exec-bash        \
-	$(P)_docker-compose_db-dump-restore
+	$(P)_docker-compose_db-dump-restore  \
+	$(P)_docker-compose_clean-pgdata
 
 define DEBIAN_UDD_MESSAGE
 
@@ -24,6 +25,7 @@ $(P)_docker-compose-up
 $(P)_docker-compose-down
 $(P)_docker-compose-exec-bash
 $(P)_docker-compose_db-dump-restore
+$(P)_docker-compose_clean-pgdata
 
 endef
 
@@ -64,6 +66,7 @@ $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
 
 
 DOCKER_PGDATA_DIR := $(TOP)/work/debian-udd/postgres/data
+DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
 
 define shell_frag_set_DEBIAN_UDD_DUMP_FILE
 DEBIAN_UDD_DUMP_FILE=`realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK)`
@@ -112,3 +115,13 @@ $(P)_docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
 $(P)_docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		config
+
+$(P)_docker-compose_clean-pgdata: $(P)_docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
+	$(DOCKER_COMPOSE_BASE_CMD) \
+		run \
+		-v $(DOCKER_PGDATA_DIR):$(DOCKER_PGDATA_TARGET) \
+		$(PROJECT_MAIN_SERVICE) \
+		bash -vc ' \
+			[ -d "$$PGDATA" ] && rm -Rfv "$$PGDATA"/*;   \
+		'
+	[ -d "$(DOCKER_PGDATA_DIR)" ] && rmdir -v "$(DOCKER_PGDATA_DIR)"
