@@ -71,10 +71,12 @@ restore_database() {
 
 	# pg_restore: options -1 or -j $(nproc) are incompatible
 	pg_restore \
-		-U ${DB_USER} \
-		-d ${DB_NAME} \
-		-j $(nproc)   \
-		--verbose \
+		-U ${DB_USER}      \
+		-d ${DB_NAME}      \
+		-j $(nproc)        \
+		--no-acl           \
+		--no-owner         \
+		--verbose          \
 		"$DUMP_FILE"
 }
 
