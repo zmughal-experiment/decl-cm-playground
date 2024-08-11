@@ -83,7 +83,15 @@ restore_database() {
 main() {
 	_check_dbname
 
-	pg_isready
+	PG_ISREADY=''
+	for i in $(seq 1 3); do
+		pg_isready && PG_ISREADY=1 && break  || sleep 2
+	done
+	if [ -z "$PG_ISREADY" ]; then
+		echo "Could not wait for database" >&2
+		exit 1
+	fi
+
 
 	## For debugging:
 	psql -U ${DB_USER} -c 'DROP DATABASE IF EXISTS '\"${DB_NAME}\"
