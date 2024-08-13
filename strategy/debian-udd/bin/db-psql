@@ -1,0 +1,24 @@
+#!/bin/sh
+
+## Requires: psql
+
+set -eu
+
+BIN_REQUIRES='
+	dirname
+	psql
+'
+
+CURDIR=`dirname "$0"`
+
+if [ -f "$CURDIR/../.env" ]; then
+	. "$CURDIR/../.env"
+fi
+
+export PGHOST="${DEBIAN_UDD_PGHOST:-127.0.0.1}"
+export PGDATABASE="${DEBIAN_UDD_PGDATABASE:-udd}"
+export PGPORT="${DEBIAN_UDD_PGPORT:-5432}"
+export PGUSER="${DEBIAN_UDD_PGUSER:-postgres}"
+export PGPASSWORD="${DEBIAN_UDD_PGPASSWORD:-password}"
+
+exec psql "$@"
