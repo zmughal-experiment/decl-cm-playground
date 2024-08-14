@@ -24,6 +24,8 @@
 
 \i sketch/debian-udd/upstream-watch_file.postgres.sql
 
+\i sketch/debian-udd/upstream_metadata.postgres.sql
+
 ```
 
 * <https://wiki.debian.org/RDF>
