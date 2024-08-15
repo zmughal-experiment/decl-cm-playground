@@ -26,6 +26,8 @@
 
 \i sketch/debian-udd/upstream_metadata.postgres.sql
 
+\i sketch/debian-udd/lintian_results.distinct-classification-tags.postgres.sql
+
 ```
 
 * <https://wiki.debian.org/RDF>
