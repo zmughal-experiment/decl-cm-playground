@@ -28,6 +28,8 @@
 
 \i sketch/debian-udd/lintian_results.distinct-classification-tags.postgres.sql
 
+\i sketch/debian-udd/lintian_results.metadata.tesseract-star.postgres.sql
+
 ```
 
 * <https://wiki.debian.org/RDF>
