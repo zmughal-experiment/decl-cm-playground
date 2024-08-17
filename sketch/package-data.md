@@ -30,6 +30,8 @@
 
 \i sketch/debian-udd/lintian_results.metadata.tesseract-star.postgres.sql
 
+\i sketch/debian-udd/lintian_results.repositories.postgres.sql
+
 ```
 
 * <https://wiki.debian.org/RDF>
