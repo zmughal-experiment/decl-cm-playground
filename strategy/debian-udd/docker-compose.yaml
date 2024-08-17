@@ -4,7 +4,6 @@
 
 services:
   udd:
-    # <https://salsa.debian.org/qa/udd/-/blob/master/scripts/recreate-db?ref_type=heads>
     image: postgres:13
     restart: always
     # set shared memory limit when using docker-compose
