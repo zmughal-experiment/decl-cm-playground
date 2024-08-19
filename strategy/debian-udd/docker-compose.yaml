@@ -4,6 +4,9 @@
 
 services:
   udd:
+    # `postgres` Docker image docs:
+    #   - <https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/>
+    #   - <https://github.com/docker-library/docs/blob/master/postgres/README.md>
     image: postgres:13
     restart: always
     # set shared memory limit when using docker-compose
