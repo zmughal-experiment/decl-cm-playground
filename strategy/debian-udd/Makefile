@@ -65,8 +65,15 @@ $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
 	$(CP) $< $@
 
 
-DOCKER_PGDATA_DIR := $(TOP)/work/debian-udd/postgres/data
+DOCKER_PGDATA_DIR_DEFAULT := $(TOP)/work/debian-udd/postgres/data
 DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
+# Set the actual absolute path to the PGDATA directory using
+# `DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR` if set (via `.env`).
+ifneq (,$(DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR))
+DOCKER_PGDATA_DIR := $(abspath $(DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR))
+else
+DOCKER_PGDATA_DIR := $(DOCKER_PGDATA_DIR_DEFAULT)
+endif
 
 define shell_frag_set_DEBIAN_UDD_DUMP_FILE
 DEBIAN_UDD_DUMP_FILE=`realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK)`
