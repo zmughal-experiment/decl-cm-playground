@@ -70,10 +70,20 @@ DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
 # Set the actual absolute path to the PGDATA directory using
 # `DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR` if set (via `.env`).
 ifneq (,$(DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR))
-DOCKER_PGDATA_DIR := $(abspath $(DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR))
+DOCKER_PGDATA_DIR := $(shell perl -MFile::Spec::Functions=rel2abs    \
+                     -e 'die "Need 2 arguments to compute rel2abs\n" \
+                                unless @ARGV == 2;                   \
+                         print rel2abs(@ARGV)'                       \
+                     $(DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR)          \
+                     $(TOP))
+ifneq ($(.SHELLSTATUS),0)
+$(error Could not compute $$DOCKER_PGDATA_DIR)
+endif
 else
 DOCKER_PGDATA_DIR := $(DOCKER_PGDATA_DIR_DEFAULT)
 endif
+#$(info $(DOCKER_PGDATA_DIR) $$(DOCKER_PGDATA_DIR))
+#$(info $(DOCKER_PGDATA_DIR_DEFAULT) $$(DOCKER_PGDATA_DIR_DEFAULT))
 
 define shell_frag_set_DEBIAN_UDD_DUMP_FILE
 DEBIAN_UDD_DUMP_FILE=`realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK)`
