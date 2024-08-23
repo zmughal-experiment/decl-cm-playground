@@ -62,8 +62,8 @@ $(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL):
 	@touch $@
 
 $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
-	@( [ ! -r $@ ] || echo "$@ already exists. Not updating (touch file to remove message)." ) \
-		|| $(CP) $< $@
+	@( [ -r $@ ] && echo "$@ already exists. Not updating (touch file to remove message)." ) \
+		|| ( echo "Copying $< to $@" && $(CP) $< $@ )
 
 DOCKER_PGDATA_DIR_DEFAULT := $(TOP)/work/debian-udd/postgres/data
 DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
