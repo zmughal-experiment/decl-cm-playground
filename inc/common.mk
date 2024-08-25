@@ -76,3 +76,20 @@ endef
 define escape-dollar
 $(subst $$,$$$$,$1)
 endef
+
+define _shell-frag-compute-rel2abs
+perl -MFile::Spec::Functions=rel2abs                 \
+	-e '                                         \
+	die "Need 2 arguments to compute rel2abs.\n" \
+		unless @ARGV == 2;                   \
+	print rel2abs(@ARGV)'
+endef
+
+define shell-with-check
+$(eval _result := $(shell $(1)))$\
+$(if $(filter 0,$(.SHELLSTATUS)),$(_result),$(error Command failed: $(1)))
+endef
+
+define get-absolute-path-with-base
+$(call shell-with-check,$(_shell-frag-compute-rel2abs) $(1) $(2))
+endef
