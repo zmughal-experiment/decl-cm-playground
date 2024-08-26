@@ -90,6 +90,9 @@ $(eval _result := $(shell $(1)))$\
 $(if $(filter 0,$(.SHELLSTATUS)),$(_result),$(error Command failed: $(1)))
 endef
 
+# $(call get-absolute-path-with-base,$\
+#       $(relative-or-absolute-path),$\
+#       $(base-path))
 define get-absolute-path-with-base
 $(call shell-with-check,$(_shell-frag-compute-rel2abs) $(1) $(2))
 endef
