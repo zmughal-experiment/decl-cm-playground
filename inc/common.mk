@@ -86,8 +86,8 @@ perl -MFile::Spec::Functions=rel2abs                 \
 endef
 
 define shell-with-check
-$(eval _result := $(shell $(1)))$\
-$(if $(filter 0,$(.SHELLSTATUS)),$(_result),$(error Command failed: $(1)))
+$(shell $(1))$\
+$(if $(filter 0,$(.SHELLSTATUS)),,$(error Command failed: $(1)))
 endef
 
 # $(call get-absolute-path-with-base,$\
