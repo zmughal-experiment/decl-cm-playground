@@ -2,6 +2,9 @@
 # - expr
 # - perl
 
+# Minimum needed for $(.SHELLSTATUS)
+MAKE_MIN_REQUIRED_VERSION := 4.2
+
 # Include and init guard in one.
 $(if $(__common_init_first_guard),$(error Should only include this file once),$(eval __common_init_first_guard :=))
 
@@ -9,6 +12,32 @@ $(if $(__common_init_first_guard),$(error Should only include this file once),$(
 VERSION := $(shell $(MAKE) --version)
 ifneq ($(firstword $(VERSION)),GNU)
 $(error Use GNU Make)
+endif
+
+# Function to compare version numbers using Perl
+# Usage: $(call version-at-least,VERSION_TO_CHECK,MINIMUM_VERSION)
+# Returns 'true' if VERSION_TO_CHECK is at least MINIMUM_VERSION, empty otherwise
+define version-at-least
+$(shell perl -MList::Util=min -e '              \
+    sub version_compare {                       \
+        my @v  = map { [split /\./] } @_;       \
+        my @v1 = @{ $$v[0] };                   \
+        my @v2 = @{ $$v[1] };                   \
+        my $$len = min(0+@v1, 0+@v2);           \
+        for my $$i (0..$$len-1) {               \
+            my $$cmp = $$v1[$$i] <=> $$v2[$$i]; \
+            return $$cmp if $$cmp;              \
+        }                                       \
+        return 0+@v1 <=> 0+@v2;                 \
+    }                                           \
+    exit 1 if version_compare(@ARGV) < 0;       \
+    print "true";                               \
+' -- $(1) $(2))
+endef
+
+# Check if GNU Make version is at least $(MAKE_MIN_REQUIRED_VERSION)
+ifeq ($(call version-at-least,$(MAKE_VERSION),$(MAKE_MIN_REQUIRED_VERSION)),)
+$(error This Makefile requires GNU Make $(MAKE_MIN_REQUIRED_VERSION) or later)
 endif
 
 MAKEFLAGS += --warn-undefined-variables
