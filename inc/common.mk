@@ -18,20 +18,22 @@ endif
 # Usage: $(call version-at-least,VERSION_TO_CHECK,MINIMUM_VERSION)
 # Returns 'true' if VERSION_TO_CHECK is at least MINIMUM_VERSION, empty otherwise
 define version-at-least
-$(shell perl -MList::Util=min -e '              \
-    sub version_compare {                       \
-        my @v  = map { [split /\./] } @_;       \
-        my @v1 = @{ $$v[0] };                   \
-        my @v2 = @{ $$v[1] };                   \
-        my $$len = min(0+@v1, 0+@v2);           \
-        for my $$i (0..$$len-1) {               \
-            my $$cmp = $$v1[$$i] <=> $$v2[$$i]; \
-            return $$cmp if $$cmp;              \
-        }                                       \
-        return 0+@v1 <=> 0+@v2;                 \
-    }                                           \
-    exit 1 if version_compare(@ARGV) < 0;       \
-    print "true";                               \
+$(shell perl -MList::Util=max -e '         \
+    sub version_compare {                  \
+        my @v  = map { [split /\./] } @_;  \
+        my @v1 = @{ $$v[0] };              \
+        my @v2 = @{ $$v[1] };              \
+        my $$len = max(0+@v1, 0+@v2);      \
+        for my $$i (0..$$len-1) {          \
+            my $$cmp =                     \
+                       ($$v1[$$i] || 0)    \
+                   <=> ($$v2[$$i] || 0);   \
+            return $$cmp if $$cmp;         \
+        }                                  \
+        return 0;                          \
+    }                                      \
+    exit 1 if version_compare(@ARGV) < 0;  \
+    print "true";                          \
 ' -- $(1) $(2))
 endef
 
