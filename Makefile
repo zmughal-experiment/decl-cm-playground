@@ -21,7 +21,7 @@ TARGETS :=         \
        terraform   \
        #
 
-.PHONY: help all $(TARGETS)
+.PHONY: $(TARGETS)
 
 define MESSAGE
 Targets for $(MAKE):
@@ -40,10 +40,12 @@ MESSAGE += $(TARGETS_MESSAGE)
 
 # Default target
 export MESSAGE
+.PHONY: help
 help: ## Show help
 	@$(ECHO) "$$MESSAGE"
 	@grep -HE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort -t: -k1,2 | cut -d: -f2- | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: all
 all: $(TARGETS)
 
 .PHONY: nop
