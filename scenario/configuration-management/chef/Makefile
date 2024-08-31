@@ -2,8 +2,10 @@ $(eval $(init-include))
 THIS_DIR := $(call get-relative-makefile-dir)
 #$(info $(CURRENT_MAKEFILE) : $(CURRENT_MAKEFILE_STACK))
 
+.PHONY: chef
+chef: ## Build Chef Docker
 define RULE :=
-chef: bin-guard-docker ## Build Chef Docker
+chef: bin-guard-docker
 	docker build -t chef-test --build-arg THIS_DIR=$(THIS_DIR) -f $(THIS_DIR)/Dockerfile.debian .
 	docker run --rm chef-test
 endef
