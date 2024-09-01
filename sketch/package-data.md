@@ -8,9 +8,9 @@
 -- DuckDB
 -- $ duckdb
 
-.read 'sketch/debian-udd/attach-pg-udd-mirror.duckdb.sql'
+.read 'strategy/debian-udd/sql/attach-pg-udd-mirror.duckdb.sql'
 
-.read 'sketch/debian-udd/sources-tesseract-lang.duckdb.sql'
+.read 'strategy/debian-udd/sql/sources-tesseract-lang.duckdb.sql'
 
 ```
 
@@ -20,17 +20,17 @@
 
 \pset pager off
 
-\i sketch/debian-udd/sources-tesseract-lang.postgres.sql
+\i strategy/debian-udd/sql/sources-tesseract-lang.postgres.sql
 
-\i sketch/debian-udd/upstream-watch_file.postgres.sql
+\i strategy/debian-udd/sql/upstream-watch_file.postgres.sql
 
-\i sketch/debian-udd/upstream_metadata.postgres.sql
+\i strategy/debian-udd/sql/upstream_metadata.postgres.sql
 
-\i sketch/debian-udd/lintian_results.distinct-classification-tags.postgres.sql
+\i strategy/debian-udd/sql/lintian_results.distinct-classification-tags.postgres.sql
 
-\i sketch/debian-udd/lintian_results.metadata.tesseract-star.postgres.sql
+\i strategy/debian-udd/sql/lintian_results.metadata.tesseract-star.postgres.sql
 
-\i sketch/debian-udd/lintian_results.repositories.postgres.sql
+\i strategy/debian-udd/sql/lintian_results.repositories.postgres.sql
 
 ```
 
