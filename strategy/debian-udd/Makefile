@@ -11,26 +11,20 @@ PROJECT_NAME := $(notdir $(THIS_DIR))
 # Prefix for rules
 P := $(PROJECT_NAME)
 
-.PHONY: \
-	$(P)_db-dump-download                \
-	$(P)_docker-compose-up               \
-	$(P)_docker-compose-down             \
-	$(P)_docker-compose-exec-bash        \
-	$(P)_docker-compose_db-dump-restore  \
-	$(P)_docker-compose_clean-pgdata
-
 define DEBIAN_UDD_MESSAGE
 
 $(P)_docker-compose-up
 $(P)_docker-compose-down
 $(P)_docker-compose-exec-bash
 $(P)_docker-compose_db-dump-restore
+$(P)_docker-compose-config
 $(P)_docker-compose_clean-pgdata
 
 endef
 
 MESSAGE += $(DEBIAN_UDD_MESSAGE)
 
+.PHONY: $(P)_db-dump-download
 $(P)_db-dump-download:
 	$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
 
@@ -107,26 +101,32 @@ endef
 $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
 
+.PHONY: $(P)_docker-compose-up
 $(P)_docker-compose-up: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		up -d $(PROJECT_MAIN_SERVICE)
 
+.PHONY: $(P)_docker-compose-down
 $(P)_docker-compose-down: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		down
 
+.PHONY: $(P)_docker-compose-exec-bash
 $(P)_docker-compose-exec-bash: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) bash
 
+.PHONY: $(P)_docker-compose_db-dump-restore
 $(P)_docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) /script/db-dump-restore
 
+.PHONY: $(P)_docker-compose-config
 $(P)_docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		config
 
+.PHONY: $(P)_docker-compose_clean-pgdata
 $(P)_docker-compose_clean-pgdata: $(P)_docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		run \
