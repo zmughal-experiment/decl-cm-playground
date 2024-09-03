@@ -39,13 +39,15 @@ DOCKER_COMPOSE_ENV_FILES    := $(THIS_DIR)/.env
 DOCKER_COMPOSE_ENV_ARGS     := $(foreach F,$(DOCKER_COMPOSE_ENV_FILES),--env-file $F)
 
 DOCKER_COMPOSE_BASE_FILES   := $(DOCKER_COMPOSE_CONFIG_FILES) \
-			       $(DOCKER_COMPOSE_ENV_FILES)
+                               $(DOCKER_COMPOSE_ENV_FILES)
 DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
-			       $(DOCKER_COMPOSE_CONFIG_ARGS) \
-			       $(DOCKER_COMPOSE_ENV_ARGS)
+                               $(DOCKER_COMPOSE_CONFIG_ARGS) \
+                               $(DOCKER_COMPOSE_ENV_ARGS)
 
 
-DEBIAN_UDD_DUMP_FILE_SYMLINK := $(TOP_DIR)/work/debian-udd/download/udd.dump
+DEBIAN_UDD_REL_DIR := work/debian-udd
+
+DEBIAN_UDD_DUMP_FILE_SYMLINK := $(TOP_DIR)/$(DEBIAN_UDD_REL_DIR)/download/udd.dump
 DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL := $(DEBIAN_UDD_DUMP_FILE_SYMLINK).sentinel
 DEBIAN_UDD_DUMP_FILE := $(realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK))
 
@@ -59,7 +61,7 @@ $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
 	@( [ -r $@ ] && echo "$@ already exists. Not updating (touch file to remove message)." ) \
 		|| ( echo "Copying $< to $@" && $(CP) $< $@ )
 
-DOCKER_PGDATA_DIR_DEFAULT := $(TOP)/work/debian-udd/postgres/data
+DOCKER_PGDATA_DIR_DEFAULT := $(TOP)/$(DEBIAN_UDD_REL_DIR)/postgres/data
 DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
 # Set the actual absolute path to the PGDATA directory using
 # `DEBIAN_UDD_DOCKER_POSTGRES_DATA_DIR` if set (via `.env`).
