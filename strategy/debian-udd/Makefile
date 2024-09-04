@@ -9,23 +9,23 @@ endif
 PROJECT_NAME := $(notdir $(THIS_DIR))
 
 # Prefix for rules
-P := $(PROJECT_NAME)
+P := $(PROJECT_NAME)_
 
 define DEBIAN_UDD_MESSAGE
 
-$(P)_docker-compose-up
-$(P)_docker-compose-down
-$(P)_docker-compose-exec-bash
-$(P)_docker-compose_db-dump-restore
-$(P)_docker-compose-config
-$(P)_docker-compose_clean-pgdata
+$(P)docker-compose-up
+$(P)docker-compose-down
+$(P)docker-compose-exec-bash
+$(P)docker-compose_db-dump-restore
+$(P)docker-compose-config
+$(P)docker-compose_clean-pgdata
 
 endef
 
 MESSAGE += $(DEBIAN_UDD_MESSAGE)
 
-.PHONY: $(P)_db-dump-download
-$(P)_db-dump-download:
+.PHONY: $(P)db-dump-download
+$(P)db-dump-download:
 	$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
 
 PROJECT_MAIN_SERVICE := udd
@@ -103,33 +103,33 @@ endef
 $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
 
-.PHONY: $(P)_docker-compose-up
-$(P)_docker-compose-up: $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose-up
+$(P)docker-compose-up: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		up -d $(PROJECT_MAIN_SERVICE)
 
-.PHONY: $(P)_docker-compose-down
-$(P)_docker-compose-down: $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose-down
+$(P)docker-compose-down: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		down
 
-.PHONY: $(P)_docker-compose-exec-bash
-$(P)_docker-compose-exec-bash: $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose-exec-bash
+$(P)docker-compose-exec-bash: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) bash
 
-.PHONY: $(P)_docker-compose_db-dump-restore
-$(P)_docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose_db-dump-restore
+$(P)docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) /script/db-dump-restore
 
-.PHONY: $(P)_docker-compose-config
-$(P)_docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose-config
+$(P)docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		config
 
-.PHONY: $(P)_docker-compose_clean-pgdata
-$(P)_docker-compose_clean-pgdata: $(P)_docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
+.PHONY: $(P)docker-compose_clean-pgdata
+$(P)docker-compose_clean-pgdata: $(P)docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		run \
 		-v $(DOCKER_PGDATA_DIR):$(DOCKER_PGDATA_TARGET) \
