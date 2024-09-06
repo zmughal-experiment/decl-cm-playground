@@ -41,6 +41,7 @@ my $tempdata = File::Spec->catfile($tempdir, $filename);
 
 my $ua = LWP::UserAgent->new;
 my $response = $ua->head($url);
+die "Could not retrieve HEAD of $url" unless $response->is_success;
 my $remote_last_modified = $response->header('Last-Modified');
 my $remote_last_modified_timestamp = str2time($remote_last_modified);
 
@@ -65,11 +66,21 @@ $0: The file $full_path has been modified (old: @{[
 	]}, new: $remote_last_modified_timestamp).
 EOF
 
-	my $possible_filename = filename_for_timestamp($top_level, $filename, $remote_last_modified_timestamp);
-
 	my $new_file;
+
+	my $use_possible_file = 0;
+	my $possible_filename = filename_for_timestamp($top_level, $filename, $remote_last_modified_timestamp);
+	my $expected_size = $response->header('Content-Length');
 	if( -r $possible_filename ) {
-		print STDERR "File with up to date time stamp already exists: $possible_filename\n";
+		print STDERR "Possible filename $possible_filename name matches timestamp $remote_last_modified_timestamp\n";
+		if( $expected_size && $expected_size == -s $possible_filename ) {
+			print STDERR "Possible filename $possible_filename size matches Content-Length at $expected_size\n";
+			$use_possible_file = 1;
+		}
+	}
+
+	if( $use_possible_file ) {
+		print STDERR "File with up-to-date timestamp already exists: $possible_filename\n";
 		$new_file = $possible_filename;
 	} else {
 		print STDERR "Downloading file";
@@ -85,7 +96,7 @@ EOF
 	die "Could not set the $full_path to new file: @{[ $new_file // 'none' ]}" unless defined $new_file and -r $new_file;
 
 	print STDERR "Creating symlink $full_path to $new_file\n";
-	unlink $full_path if -l $full_path;
+	unlink $full_path or die "Could not remove $full_path: $!" if -l $full_path;
 	symlink(basename($new_file), $full_path) or die "Failed to create symlink: $!\n";
 } else {
 	print STDERR "$0: The file $full_path has not been modified.\n";
