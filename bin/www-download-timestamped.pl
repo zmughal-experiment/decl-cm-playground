@@ -95,9 +95,16 @@ EOF
 
 	die "Could not set the $full_path to new file: @{[ $new_file // 'none' ]}" unless defined $new_file and -r $new_file;
 
+	# Move replaces atomically.
+	#
+	# NOTE: this will still leave a temporary symlink file if the move
+	# fails.
 	print STDERR "Creating symlink $full_path to $new_file\n";
-	unlink $full_path or die "Could not remove $full_path: $!" if -l $full_path;
-	symlink(basename($new_file), $full_path) or die "Failed to create symlink: $!\n";
+	my $temp_symlink = "${full_path}.tmp";
+	symlink(basename($new_file), $temp_symlink)
+		or die "Failed to create temporary symlink: $!\n";
+	move($temp_symlink, $full_path)
+		or die "Failed to update symlink: $!\n";
 } else {
 	print STDERR "$0: The file $full_path has not been modified.\n";
 }
