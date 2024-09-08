@@ -24,10 +24,6 @@ endef
 
 MESSAGE += $(DEBIAN_UDD_MESSAGE)
 
-.PHONY: $(P)db-dump-download
-$(P)db-dump-download:
-	$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
-
 PROJECT_MAIN_SERVICE := udd
 
 ## docker compose -f ...
@@ -51,10 +47,17 @@ DEBIAN_UDD_DUMP_FILE_SYMLINK := $(TOP_DIR)/$(DEBIAN_UDD_REL_DIR)/download/udd.du
 DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL := $(DEBIAN_UDD_DUMP_FILE_SYMLINK).sentinel
 DEBIAN_UDD_DUMP_FILE := $(realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK))
 
+define $(P)DB_DUMP_DOWNLOAD_CMD
+$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
+endef
+
+.PHONY: $(P)db-dump-download
+$(P)db-dump-download:
+	$($(P)DB_DUMP_DOWNLOAD_CMD)
 
 $(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL):
 	$(MKDIR_P) $(@D)
-	$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
+	$($(P)DB_DUMP_DOWNLOAD_CMD)
 	@touch $@
 
 $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
