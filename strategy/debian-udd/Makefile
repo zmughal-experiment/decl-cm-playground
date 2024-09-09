@@ -55,13 +55,21 @@ $(TOP_DIR)/bin/www-download-timestamped.pl     \
 	--file $(DEBIAN_UDD_DUMP_FILE_SYMLINK)
 endef
 
+# Named .PHONY target for downloading.
 .PHONY: $(P)db-dump-download
 $(P)db-dump-download:
+	@$(MKDIR_P) $(dir $(DEBIAN_UDD_DUMP_FILE_SYMLINK))
 	$($(P)DB_DUMP_DOWNLOAD_CMD)
 
-$(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL):
-	$(MKDIR_P) $(@D)
+$(DEBIAN_UDD_DUMP_FILE_SYMLINK):
+	@$(MKDIR_P) $(@D)
 	$($(P)DB_DUMP_DOWNLOAD_CMD)
+
+# Target for sentinel is `-f` + `.PHONY` to force creation after updating
+# symlink.
+.PHONY: $(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL)
+$(DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL): $(DEBIAN_UDD_DUMP_FILE_SYMLINK)
+	@echo Creating $@
 	@touch $@
 
 $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
