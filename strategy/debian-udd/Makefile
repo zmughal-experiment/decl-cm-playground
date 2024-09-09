@@ -43,12 +43,16 @@ DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
 
 DEBIAN_UDD_REL_DIR := work/debian-udd
 
+DEBIAN_UDD_DUMP_URL := https://udd.debian.org/dumps/udd.dump
+
 DEBIAN_UDD_DUMP_FILE_SYMLINK := $(TOP_DIR)/$(DEBIAN_UDD_REL_DIR)/download/udd.dump
 DEBIAN_UDD_DUMP_FILE_SYMLINK_SENTINEL := $(DEBIAN_UDD_DUMP_FILE_SYMLINK).sentinel
 DEBIAN_UDD_DUMP_FILE := $(realpath $(DEBIAN_UDD_DUMP_FILE_SYMLINK))
 
 define $(P)DB_DUMP_DOWNLOAD_CMD
-$(THIS_DIR)/bin/db-dump-download $(TOP_DIR)
+$(TOP_DIR)/bin/www-download-timestamped.pl     \
+	--url  $(DEBIAN_UDD_DUMP_URL)          \
+	--file $(DEBIAN_UDD_DUMP_FILE_SYMLINK)
 endef
 
 .PHONY: $(P)db-dump-download
