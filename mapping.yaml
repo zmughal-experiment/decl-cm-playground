@@ -1,0 +1,11 @@
+package:
+  geos:
+    debian-source: 'geos'            # https://packages.debian.org/source/geos
+    wikidata: 'Q1503283'             # https://www.wikidata.org/wiki/Q1503283
+    release-monitoring.org: '13493'  # https://release-monitoring.org/project/13493
+    repology: 'geos'                 # https://repology.org/project/geos/versions
+  vim:
+    debian-source: 'vim'             # https://packages.debian.org/source/vim
+    wikidata: 'Q131382'              # https://www.wikidata.org/wiki/Q131382
+    release-monitoring.org: '5092'   # https://release-monitoring.org/project/5092/
+    repology: 'vim'                  # https://repology.org/project/vim/versions
