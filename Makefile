@@ -69,6 +69,7 @@ INCLUDES := \
 	$(THIS_DIR)/scenario/infrastructure-as-code/terraform/Makefile     \
 	\
 	$(THIS_DIR)/strategy/debian-udd/Makefile                           \
+	$(THIS_DIR)/strategy/anitya/Makefile                               \
 	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))

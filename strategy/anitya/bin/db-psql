@@ -1,0 +1,24 @@
+#!/bin/sh
+
+## Requires: psql
+
+set -eu
+
+BIN_REQUIRES='
+	dirname
+	psql
+'
+
+CURDIR=`dirname "$0"`
+
+if [ -f "$CURDIR/../.env" ]; then
+	. "$CURDIR/../.env"
+fi
+
+export PGHOST="${ANITYA_PGHOST:-127.0.0.1}"
+export PGDATABASE="${ANITYA_PGDATABASE:-anitya}"
+export PGPORT="${ANITYA_PGPORT:-5432}"
+export PGUSER="${ANITYA_PGUSER:-postgres}"
+export PGPASSWORD="${ANITYA_PGPASSWORD:-password}"
+
+exec psql "$@"
