@@ -1,0 +1,29 @@
+# Environment variables:
+#
+# See `strategy/repology/.env.template`.
+
+services:
+  repology:
+    # `postgres` Docker image docs:
+    #   - <https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/>
+    #   - <https://github.com/docker-library/docs/blob/master/postgres/README.md>
+    image: decl-cm-playground/repology/postgres
+    build:
+      dockerfile: Dockerfile
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    volumes:
+      - ${REPOLOGY_DOCKER_POSTGRES_DATA_DIR:-./work/postgres/data}:/var/lib/postgresql/data
+      - ${REPOLOGY_DUMP_FILE:?Need to define dump file}:/dump/repology-database-dump-latest.sql.zst
+      - ${THIS_DIR_ABSPATH:?Need to set THIS_DIR_ABSPATH}/bin/db-dump-restore:/script/db-dump-restore
+      ## set shared memory limit when deploy via swarm stack
+      #- type: tmpfs
+      #  target: /dev/shm
+      #  tmpfs:
+      #    size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: ${REPOLOGY_PGPASSWORD:-password}
+      REPOLOGY_PGDATABASE: ${REPOLOGY_PGDATABASE:-repology}
+    ports:
+      - "${REPOLOGY_PGPORT:-5432}:5432"

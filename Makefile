@@ -70,6 +70,7 @@ INCLUDES := \
 	\
 	$(THIS_DIR)/strategy/debian-udd/Makefile                           \
 	$(THIS_DIR)/strategy/anitya/Makefile                               \
+	$(THIS_DIR)/strategy/repology/Makefile                             \
 	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(inc))))

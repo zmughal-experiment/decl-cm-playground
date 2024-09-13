@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+set -x
+set -euo pipefail
+
+# SEE ALSO
+#
+# Upstream `repology` restore script:
+#   - <https://github.com/repology/repology-updater#creating-the-database>
+#   - <https://dumps.repology.org/README.txt>
+
+# DEFAULTS
+DB_USER="${PGUSER:-postgres}"
+DB_NAME="${REPOLOGY_PGDATABASE:-repology}"
+
+## Requires
+BIN_REQUIRES='
+	grep
+	cat
+	seq
+
+	apt-get
+	dpkg-query
+
+	psql
+	pg_isready
+	pg_restore
+'
+for CHECK_BIN in $BIN_REQUIRES ; do
+	type -P $CHECK_BIN >/dev/null || ( echo "$0: Could not find $CHECK_BIN" && false )
+done
+
+
+_check_dbname() {
+	## Requires: grep
+	if echo "$DB_NAME" | grep -qF '"'; then
+		# Double quotes would have to be escaped by doubling the
+		# character (e.g., "one""two").
+		echo "Database name can not contain double quote" >&2
+		exit 1
+	fi
+}
+
+
+create_database() {
+	## Requires: cat psql
+	echo "Creating database '$DB_NAME'" >&2
+
+	export CREATE_DATABASE="$(cat <<EOF
+		SELECT
+			\$SQL\$
+			CREATE DATABASE
+				"${DB_NAME}"
+			WITH
+				TEMPLATE        = template0
+				ENCODING        = 'UTF8'
+				LOCALE_PROVIDER = libc
+				LOCALE          = 'en_US.UTF-8'
+			\$SQL\$
+		WHERE NOT EXISTS (
+			SELECT
+			FROM pg_database
+			WHERE datname = \$\$${DB_NAME}\$\$
+		)\\gexec
+EOF
+	)"
+
+	echo "$CREATE_DATABASE" | psql -U ${DB_USER}
+}
+
+install_extensions() {
+	true; # NOP
+}
+
+restore_database() {
+	## Requires: zstdcat psql
+	local DUMP_FILE="$1"
+
+	PGX_LIST='pg_trgm libversion'
+	for $extension in $PGX_LIST ; do
+		echo 'CREATE EXTENSION '$extension \
+			| psql                     \
+				-U ${DB_USER}      \
+				-d ${DB_NAME}      \
+				-1                 \
+				-v ON_ERROR_STOP=1 \
+				#
+	done
+
+	zstdcat "$DUMP_FILE"               \
+		| psql                     \
+			-U ${DB_USER}      \
+			-d ${DB_NAME}      \
+			-1                 \
+			-v ON_ERROR_STOP=1 \
+			#
+}
+
+main() {
+	## Requires: pg_isready psql
+	_check_dbname
+
+	PG_ISREADY=''
+	for i in $(seq 1 3); do
+		pg_isready && PG_ISREADY=1 && break  || sleep 2
+	done
+	if [ -z "$PG_ISREADY" ]; then
+		echo "Could not wait for database" >&2
+		exit 1
+	fi
+
+
+	## For debugging:
+	psql -U ${DB_USER} -c 'DROP DATABASE IF EXISTS '\"${DB_NAME}\"
+
+	create_database
+	install_extensions
+	restore_database /dump/repology-database-dump-latest.sql.zst
+}
+
+main "$@"
