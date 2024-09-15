@@ -11,7 +11,7 @@ PROJECT_NAME := $(notdir $(THIS_DIR))
 # Prefix for rules
 P := $(PROJECT_NAME)_
 
-define REPOLOGY_MESSAGE
+define REPOLOGY_MESSAGE :=
 
 $(P)docker-compose-up
 $(P)docker-compose-down
@@ -49,7 +49,7 @@ REPOLOGY_DUMP_FILE_SYMLINK := $(TOP_DIR)/$(REPOLOGY_REL_DIR)/download/repology-d
 REPOLOGY_DUMP_FILE_SYMLINK_SENTINEL := $(REPOLOGY_DUMP_FILE_SYMLINK).sentinel
 REPOLOGY_DUMP_FILE := $(realpath $(REPOLOGY_DUMP_FILE_SYMLINK))
 
-define $(P)DB_DUMP_DOWNLOAD_CMD
+define $(P)DB_DUMP_DOWNLOAD_CMD :=
 $(TOP_DIR)/bin/www-download-timestamped.pl     \
 	--url  $(REPOLOGY_DUMP_URL)          \
 	--file $(REPOLOGY_DUMP_FILE_SYMLINK)
@@ -57,9 +57,12 @@ endef
 
 # Named .PHONY target for downloading.
 .PHONY: $(P)db-dump-download
+define T :=
 $(P)db-dump-download:
 	@$(MKDIR_P) $(dir $(REPOLOGY_DUMP_FILE_SYMLINK))
 	$($(P)DB_DUMP_DOWNLOAD_CMD)
+endef
+$(eval $(T))
 
 $(REPOLOGY_DUMP_FILE_SYMLINK):
 	@$(MKDIR_P) $(@D)
@@ -90,15 +93,15 @@ endif
 #$(info $(DOCKER_PGDATA_DIR) $$(DOCKER_PGDATA_DIR))
 #$(info $(DOCKER_PGDATA_DIR_DEFAULT) $$(DOCKER_PGDATA_DIR_DEFAULT))
 
-define shell_frag_set_REPOLOGY_DUMP_FILE
+define shell_frag_set_REPOLOGY_DUMP_FILE :=
 REPOLOGY_DUMP_FILE=`realpath $(REPOLOGY_DUMP_FILE_SYMLINK)`
 endef
 
-define shell_frag_set_REPOLOGY_DOCKER_POSTGRES_DATA_DIR
+define shell_frag_set_REPOLOGY_DOCKER_POSTGRES_DATA_DIR :=
 REPOLOGY_DOCKER_POSTGRES_DATA_DIR=$(DOCKER_PGDATA_DIR)
 endef
 
-define shell_frag_set_THIS_DIR_ABSPATH
+define shell_frag_set_THIS_DIR_ABSPATH :=
 THIS_DIR_ABSPATH=`realpath $(THIS_DIR)`
 endef
 
@@ -107,7 +110,7 @@ DOCKER_COMPOSE_BASE_DEPS    := \
 	$(DOCKER_PGDATA_DIR) \
 	bin-guard-docker bin-guard-realpath
 
-define DOCKER_COMPOSE_BASE_CMD
+define DOCKER_COMPOSE_BASE_CMD :=
 env \
 	$(shell_frag_set_REPOLOGY_DUMP_FILE)                \
 	$(shell_frag_set_REPOLOGY_DOCKER_POSTGRES_DATA_DIR) \
@@ -119,37 +122,55 @@ $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
 
 .PHONY: $(P)docker-compose-up
+define T :=
 $(P)docker-compose-up: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		up -d $(PROJECT_MAIN_SERVICE) --build
+endef
+$(eval $(T))
 
 .PHONY: $(P)docker-compose-down
+define T :=
 $(P)docker-compose-down: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		down
+endef
+$(eval $(T))
 
 .PHONY: $(P)docker-compose-exec-bash
+define T :=
 $(P)docker-compose-exec-bash: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) bash
+endef
+$(eval $(T))
 
 .PHONY: $(P)docker-compose_db-dump-restore
+define T :=
 $(P)docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) /script/db-dump-restore
+endef
+$(eval $(T))
 
 .PHONY: $(P)docker-compose-config
+define T :=
 $(P)docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		config
+endef
+$(eval $(T))
 
 .PHONY: $(P)docker-compose_clean-pgdata
+define T :=
 $(P)docker-compose_clean-pgdata: $(P)docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		run \
 		-v $(DOCKER_PGDATA_DIR):$(DOCKER_PGDATA_TARGET) \
 		$(PROJECT_MAIN_SERVICE) \
 		bash -vc ' \
-			[ -d "$$PGDATA" ] && rm -Rfv "$$PGDATA"/*;   \
+			[ -d "$(DOLLAR)$(DOLLAR)PGDATA" ] && rm -Rfv "$(DOLLAR)$(DOLLAR)PGDATA"/*;   \
 		'
 	[ -d "$(DOCKER_PGDATA_DIR)" ] && rmdir -v "$(DOCKER_PGDATA_DIR)"
+endef
+$(eval $(T))
