@@ -78,7 +78,7 @@ RUN \
 	set -eux \
 	\
 	# Remove packages \
-	&& apt-get -qq purge ${APT_PKGS_DEV} \
+	&& apt-get -qq purge --auto-remove ${APT_PKGS_DEV} \
 	# No `apt-get clean`: \
 	# See `cat /etc/apt/apt.conf.d/docker-clean`. \
 	&& rm -rf /var/lib/apt/lists/* \
