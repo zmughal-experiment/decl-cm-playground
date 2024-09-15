@@ -57,12 +57,12 @@ endef
 
 # Named .PHONY target for downloading.
 .PHONY: $(P)db-dump-download
-define T :=
+define RULE :=
 $(P)db-dump-download:
 	@$(MKDIR_P) $(dir $(ANITYA_DUMP_FILE_SYMLINK))
 	$($(P)DB_DUMP_DOWNLOAD_CMD)
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 $(ANITYA_DUMP_FILE_SYMLINK):
 	@$(MKDIR_P) $(@D)
@@ -122,47 +122,47 @@ $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
 
 .PHONY: $(P)docker-compose-up
-define T :=
+define RULE :=
 $(P)docker-compose-up: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		up -d $(PROJECT_MAIN_SERVICE)
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose-down
-define T :=
+define RULE :=
 $(P)docker-compose-down: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		down
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose-exec-bash
-define T :=
+define RULE :=
 $(P)docker-compose-exec-bash: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) bash
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose_db-dump-restore
-define T :=
+define RULE :=
 $(P)docker-compose_db-dump-restore: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		exec $(PROJECT_MAIN_SERVICE) /script/db-dump-restore
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose-config
-define T :=
+define RULE :=
 $(P)docker-compose-config: $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		config
 endef
-$(eval $(T))
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose_clean-pgdata
-define T :=
+define RULE :=
 $(P)docker-compose_clean-pgdata: $(P)docker-compose-down $(DOCKER_COMPOSE_BASE_DEPS)
 	$(DOCKER_COMPOSE_BASE_CMD) \
 		run \
@@ -173,4 +173,4 @@ $(P)docker-compose_clean-pgdata: $(P)docker-compose-down $(DOCKER_COMPOSE_BASE_D
 		'
 	[ -d "$(DOCKER_PGDATA_DIR)" ] && rmdir -v "$(DOCKER_PGDATA_DIR)"
 endef
-$(eval $(T))
+$(eval $(RULE))
