@@ -29,8 +29,8 @@ RUN \
 	&& apt-get update && apt-get install -y --no-install-recommends \
 		$APT_PKGS_DEV $APT_PKGS_RUN \
 	# }}} \
-	&& true
-RUN \
+	&& true \
+#RUN \
 	# LIBVERSION-LIB START {{{ \
 	set -eux \
 	\
@@ -51,8 +51,8 @@ RUN \
 	&& make install \
 	&& ldconfig \
 	# LIBVERSION-LIB END }}} \
-	&& true
-RUN \
+	&& true \
+#RUN \
 	# LIBVERSION-PGX START {{{ \
 	set -eux \
 	\
@@ -72,8 +72,8 @@ RUN \
 	&& make \
 	&& make install \
 	# LIBVERSION-PGX END }}} \
-	&& true
-RUN \
+	&& true \
+#RUN \
 	# Clean up build requirements {{{ \
 	set -eux \
 	\
