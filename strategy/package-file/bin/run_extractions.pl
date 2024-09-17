@@ -32,7 +32,7 @@ foreach my $dist (@distributions) {
     EOF
 
     # Build the Docker image
-    my $image_name = "file-extractor-$dist->{name}:latest";
+    my $image_name = "decl-cm-playground/package-file/extractor-$dist->{name}";
     open(my $docker_build, '|-', 'docker', 'build', '-t', $image_name, '-')
         or die "Could not open pipe to docker build: $!";
     print $docker_build $dockerfile;
