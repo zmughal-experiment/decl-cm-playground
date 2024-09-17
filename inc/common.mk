@@ -109,6 +109,7 @@ $(MAKEFILE_$(CURRENT_MAKEFILE)_RELATIVE_DIR)
 endef
 
 DOLLAR := $$
+DOLLARDOLLAR := $$$$
 
 # $(call escape-dollar,$(VAR_TO_ESCAPE))
 define escape-dollar

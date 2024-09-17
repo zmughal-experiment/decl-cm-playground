@@ -169,7 +169,7 @@ $(P)docker-compose_clean-pgdata: $(P)docker-compose-down $(DOCKER_COMPOSE_BASE_D
 		-v $(DOCKER_PGDATA_DIR):$(DOCKER_PGDATA_TARGET) \
 		$(PROJECT_MAIN_SERVICE) \
 		bash -vc ' \
-			[ -d "$(DOLLAR)$(DOLLAR)PGDATA" ] && rm -Rfv "$(DOLLAR)$(DOLLAR)PGDATA"/*;   \
+			[ -d "$(DOLLARDOLLAR)PGDATA" ] && rm -Rfv "$(DOLLARDOLLAR)PGDATA"/*;   \
 		'
 	[ -d "$(DOCKER_PGDATA_DIR)" ] && rmdir -v "$(DOCKER_PGDATA_DIR)"
 endef
