@@ -53,6 +53,10 @@ MKDIR_P := mkdir -p
 CP      := cp
 ECHO    := echo
 
+COMMON_INCLUDES_ := \
+            inc/str-transform.mk \
+            #
+
 # Uses expr(1).
 define get-including-makefile
 $(word $(shell expr $(words $(MAKEFILE_LIST)) - 1),$(MAKEFILE_LIST))
@@ -63,6 +67,7 @@ define init-first
 $(if $(__common_init_first_guard),$(error Should only call init-first once),__common_init_first_guard := 1)
 CURRENT_MAKEFILE := $(realpath $(call get-including-makefile))
 ROOT_DIR := $(dir $(CURRENT_MAKEFILE))
+include $(COMMON_INCLUDES_)
 endef
 
 # Initialize for subsequent times
