@@ -14,6 +14,13 @@ my @distributions = (
         install_cmd => 'apt-get update && apt-get install -y perl perl-modules',
     },
     {
+        name => 'debian_apt_file',
+        image => 'debian:latest',
+        script => 'debian_apt_file_extract.pl',
+        output => 'debian_apt_file_files.txt',
+        install_cmd => 'apt-get update && apt-get install -y perl perl-modules apt-file',
+    },
+    {
         name => 'fedora',
         image => 'fedora:latest',
         script => 'fedora_extract.pl',
@@ -58,9 +65,7 @@ foreach my $dist (@distributions) {
     print "Docker command for $dist->{name}:\n";
     print Dumper(\@cmd);
 
-    my ($stdout, $stderr, $exit) = tee {
-        system(@cmd);
-    };
+    my $exit = system(@cmd);
 
     if ($exit == 0) {
         print "Extraction complete for $dist->{name}. Output saved to $output_file\n";
