@@ -27,6 +27,13 @@ my @distributions = (
         output => 'fedora_files.txt',
         install_cmd => 'dnf install -y perl-interpreter',
     },
+    {
+        name => 'fedora_dnf_repoquery',
+        image => 'fedora:latest',
+        script => 'fedora_dnf_repoquery_extract.pl',
+        output => 'fedora_dnf_repoquery_files.txt',
+        install_cmd => 'dnf install -y perl-interpreter',
+    },
 );
 
 foreach my $dist (@distributions) {
