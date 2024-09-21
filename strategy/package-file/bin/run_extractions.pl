@@ -34,6 +34,13 @@ my @distributions = (
         output => 'fedora_dnf_repoquery_files.txt',
         install_cmd => 'dnf install -y perl-interpreter',
     },
+    {
+        name => 'fedora_unzck',
+        image => 'fedora:latest',
+        script => 'fedora_unzck_extract.pl',
+        output => 'fedora_unzck_files.txt',
+        install_cmd => 'dnf install -y perl-interpreter zchunk perl-File-Find',
+    },
 );
 
 foreach my $dist (@distributions) {
@@ -58,6 +65,7 @@ foreach my $dist (@distributions) {
     }
 
     my $output_file = path(qw(work package-file), $dist->{output});
+    next if $output_file->exists;
     $output_file->touchpath;
 
     # Run the Docker container

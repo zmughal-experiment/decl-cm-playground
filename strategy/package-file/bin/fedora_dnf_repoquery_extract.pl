@@ -10,9 +10,7 @@ waitpid($pid, 0);
 die "Failed to update dnf cache: $?" if $?;
 
 
-my @dnf_opts = ('--cacheonly',
-# '--setopt=reposdir='
-);
+my @dnf_opts = ('--cacheonly');
 
 # Run dnf repoquery command to get package names
 warn "Getting package list...\n";
