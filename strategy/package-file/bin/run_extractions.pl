@@ -14,6 +14,13 @@ my @distributions = (
         install_cmd => 'apt-get update && apt-get install -y perl perl-modules',
     },
     {
+        name => 'debian_dpkg-query',
+        image => 'debian:latest',
+        script => 'debian_dpkg-query_extract.pl',
+        output => 'debian_dpkg-query_files.txt',
+        install_cmd => 'apt-get update && apt-get install -y perl perl-modules',
+    },
+    {
         name => 'debian_apt_file',
         image => 'debian:latest',
         script => 'debian_apt_file_extract.pl',
