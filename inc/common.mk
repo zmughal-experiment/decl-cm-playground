@@ -124,6 +124,14 @@ define escape-dollar
 $(subst $$,$$$$,$1)
 endef
 
+define _shell-frag-compute-abs2rel
+perl -MFile::Spec::Functions=abs2rel                 \
+	-e '                                         \
+	die "Need 2 arguments to compute abs2rel.\n" \
+		unless @ARGV == 2;                   \
+	print abs2rel(@ARGV)'
+endef
+
 define _shell-frag-compute-rel2abs
 perl -MFile::Spec::Functions=rel2abs                 \
 	-e '                                         \
@@ -142,4 +150,11 @@ endef
 #       $(base-path))
 define get-absolute-path-with-base
 $(call shell-with-check,$(_shell-frag-compute-rel2abs) $(1) $(2))
+endef
+
+# $(call get-relative-path-with-base,$\
+#       $(relative-or-absolute-path),$\
+#       $(base-path))
+define get-relative-path-with-base
+$(call shell-with-check,$(_shell-frag-compute-abs2rel) $(1) $(2))
 endef
