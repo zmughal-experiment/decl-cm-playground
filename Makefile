@@ -1,4 +1,6 @@
 # NOTE: GNU Makefile
+
+# Must set TOP before including.
 TOP := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 include $(TOP)/inc/common.mk
 $(eval $(init-first))

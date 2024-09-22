@@ -1,6 +1,14 @@
+# NOTE: GNU Makefile
+#
 # Requires:
 # - expr
 # - perl
+
+# Must set TOP to the following before including:
+#
+#   TOP := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
+
+
 
 # Minimum needed for $(.SHELLSTATUS)
 MAKE_MIN_REQUIRED_VERSION := 4.2
