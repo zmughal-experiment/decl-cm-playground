@@ -61,8 +61,8 @@ MKDIR_P := mkdir -p
 CP      := cp
 ECHO    := echo
 
-COMMON_INCLUDES_ := \
-            inc/str-transform.mk \
+COMMON_INCLUDES_ = \
+            $(TOP)/inc/str-transform.mk \
             #
 
 # Uses expr(1).
