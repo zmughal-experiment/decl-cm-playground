@@ -41,7 +41,7 @@ DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
                                $(DOCKER_COMPOSE_ENV_ARGS)
 
 
-ANITYA_REL_DIR := work/anitya
+ANITYA_REL_DIR := work/$(call get-relative-path-with-base,$(THIS_DIR),$(TOP))
 
 ANITYA_DUMP_URL := https://infrastructure.fedoraproject.org/infra/db-dumps/anitya.dump.xz
 

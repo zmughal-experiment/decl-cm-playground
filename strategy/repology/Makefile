@@ -41,7 +41,7 @@ DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
                                $(DOCKER_COMPOSE_ENV_ARGS)
 
 
-REPOLOGY_REL_DIR := work/repology
+REPOLOGY_REL_DIR := work/$(call get-relative-path-with-base,$(THIS_DIR),$(TOP))
 
 REPOLOGY_DUMP_URL := https://dumps.repology.org/repology-database-dump-latest.sql.zst
 

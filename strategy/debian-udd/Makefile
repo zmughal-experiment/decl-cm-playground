@@ -41,7 +41,7 @@ DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
                                $(DOCKER_COMPOSE_ENV_ARGS)
 
 
-DEBIAN_UDD_REL_DIR := work/debian-udd
+DEBIAN_UDD_REL_DIR := work/$(call get-relative-path-with-base,$(THIS_DIR),$(TOP))
 
 DEBIAN_UDD_DUMP_URL := https://udd.debian.org/dumps/udd.dump
 
