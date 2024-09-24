@@ -41,16 +41,16 @@ DOCKER_COMPOSE_BASE_ARGS    := -p $(PROJECT_NAME) \
                                $(DOCKER_COMPOSE_ENV_ARGS)
 
 
-REPOLOGY_REL_DIR := work/$(call get-relative-path-with-base,$(THIS_DIR),$(TOP))
+REPOLOGY_REL_DIR := work/$(call get-relative-path-with-base,$(THIS_DIR),$(ROOT_DIR_ABSOLUTE))
 
 REPOLOGY_DUMP_URL := https://dumps.repology.org/repology-database-dump-latest.sql.zst
 
-REPOLOGY_DUMP_FILE_SYMLINK := $(TOP_DIR)/$(REPOLOGY_REL_DIR)/download/repology-database-dump-latest.sql.zst
+REPOLOGY_DUMP_FILE_SYMLINK := $(ROOT_DIR_RELATIVE)/$(REPOLOGY_REL_DIR)/download/repology-database-dump-latest.sql.zst
 REPOLOGY_DUMP_FILE_SYMLINK_SENTINEL := $(REPOLOGY_DUMP_FILE_SYMLINK).sentinel
 REPOLOGY_DUMP_FILE := $(realpath $(REPOLOGY_DUMP_FILE_SYMLINK))
 
 define $(P)DB_DUMP_DOWNLOAD_CMD :=
-$(TOP_DIR)/bin/www-download-timestamped.pl     \
+$(ROOT_DIR_RELATIVE)/bin/www-download-timestamped.pl     \
 	--url  $(REPOLOGY_DUMP_URL)          \
 	--file $(REPOLOGY_DUMP_FILE_SYMLINK)
 endef
@@ -79,14 +79,14 @@ $(THIS_DIR)/.env: $(THIS_DIR)/.env.template
 	@( [ -r $@ ] && echo "$@ already exists. Not updating (touch file to remove message)." ) \
 		|| ( echo "Copying $< to $@" && $(CP) $< $@ )
 
-DOCKER_PGDATA_DIR_DEFAULT := $(TOP)/$(REPOLOGY_REL_DIR)/postgres/data
+DOCKER_PGDATA_DIR_DEFAULT := $(ROOT_DIR_ABSOLUTE)/$(REPOLOGY_REL_DIR)/postgres/data
 DOCKER_PGDATA_TARGET := /var/lib/postgresql/data
 # Set the actual absolute path to the PGDATA directory using
 # `REPOLOGY_DOCKER_POSTGRES_DATA_DIR` if set (via `.env`).
 ifneq (,$(REPOLOGY_DOCKER_POSTGRES_DATA_DIR))
 DOCKER_PGDATA_DIR := $(call get-absolute-path-with-base,$\
 	$(REPOLOGY_DOCKER_POSTGRES_DATA_DIR),$\
-	$(TOP))
+	$(ROOT_DIR_ABSOLUTE))
 else
 DOCKER_PGDATA_DIR := $(DOCKER_PGDATA_DIR_DEFAULT)
 endif

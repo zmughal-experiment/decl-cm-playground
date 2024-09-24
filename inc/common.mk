@@ -4,12 +4,6 @@
 # - expr
 # - perl
 
-# Must set TOP to the following before including:
-#
-#   TOP := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
-
-
-
 # Minimum needed for $(.SHELLSTATUS)
 MAKE_MIN_REQUIRED_VERSION := 4.2
 
@@ -61,8 +55,9 @@ MKDIR_P := mkdir -p
 CP      := cp
 ECHO    := echo
 
-COMMON_INCLUDES_ = \
-            $(TOP)/inc/str-transform.mk \
+COMMON_INCLUDES_REL_ :=          \
+            inc/str-transform.mk \
+            inc/guard.mk         \
             #
 
 # Uses expr(1).
@@ -73,9 +68,12 @@ endef
 # Initialize the first time
 define init-first
 $(if $(__common_init_first_guard),$(error Should only call init-first once),__common_init_first_guard := 1)
-CURRENT_MAKEFILE := $(realpath $(call get-including-makefile))
-ROOT_DIR := $(dir $(CURRENT_MAKEFILE))
-include $(COMMON_INCLUDES_)
+$(eval _INCLUDING_MAKEFILE_RELATIVE := $(call get-including-makefile))
+$(eval _INCLUDING_MAKEFILE_ABSOLUTE := $(realpath $(_INCLUDING_MAKEFILE_RELATIVE)))
+$(eval CURRENT_MAKEFILE := $(_INCLUDING_MAKEFILE_ABSOLUTE))
+$(eval ROOT_DIR_RELATIVE := $(patsubst %/,%,$(dir $(_INCLUDING_MAKEFILE_RELATIVE))))
+$(eval ROOT_DIR_ABSOLUTE := $(patsubst %/,%,$(dir $(_INCLUDING_MAKEFILE_ABSOLUTE))))
+include $(foreach F,$(COMMON_INCLUDES_REL_),$(ROOT_DIR_RELATIVE)/$(F))
 endef
 
 # Initialize for subsequent times
