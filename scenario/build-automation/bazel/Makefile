@@ -1,7 +1,8 @@
 $(eval $(init-include))
 THIS_DIR := $(call get-relative-makefile-dir)
 
-export MY_BAZEL_OUTPUT_ROOT := $(ROOT_DIR_ABSOLUTE)/output/$(THIS_DIR)
+THIS_DIR_REL_ROOT := $(call get-relative-path-with-base,$(THIS_DIR),$(ROOT_DIR_ABSOLUTE))
+export MY_BAZEL_OUTPUT_ROOT := $(ROOT_DIR_ABSOLUTE)/output/$(THIS_DIR_REL_ROOT)
 #DOCKER_BAZEL_OUTPUT  := /home/ubuntu/.cache/bazel/_bazel_ubuntu
 DOCKER_BAZEL_OUTPUT  := /bazel-output-root
 DOCKER_UID := $(shell id -u)
@@ -31,7 +32,7 @@ bazel: $$(BAZEL_TARGET_BIN_GUARDS)
 	# Create Debian package lock file
 	$(ECHO) '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
 	docker run --rm \
-		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR)/debian_snapshot:/workspace    \
+		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR_REL_ROOT)/debian_snapshot:/workspace    \
 		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
 		-u $(DOCKER_UID)                                    \
 		-w /workspace                                       \
@@ -40,7 +41,7 @@ bazel: $$(BAZEL_TARGET_BIN_GUARDS)
 			run @bullseye//:lock
 	# Create image
 	docker run --rm \
-		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR)/debian_snapshot:/workspace    \
+		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR_REL_ROOT)/debian_snapshot:/workspace    \
 		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
 		-u $(DOCKER_UID)                                    \
 		-w /workspace                                       \
