@@ -2,7 +2,7 @@ $(eval $(init-include))
 THIS_DIR := $(call get-relative-makefile-dir)
 
 THIS_DIR_REL_ROOT := $(call get-relative-path-with-base,$(THIS_DIR),$(ROOT_DIR_ABSOLUTE))
-export MY_BAZEL_OUTPUT_ROOT := $(ROOT_DIR_ABSOLUTE)/output/$(THIS_DIR_REL_ROOT)
+export MY_BAZEL_OUTPUT_ROOT := $(ROOT_DIR_ABSOLUTE)/work/$(THIS_DIR_REL_ROOT)
 #DOCKER_BAZEL_OUTPUT  := /home/ubuntu/.cache/bazel/_bazel_ubuntu
 DOCKER_BAZEL_OUTPUT  := /bazel-output-root
 DOCKER_UID := $(shell id -u)
