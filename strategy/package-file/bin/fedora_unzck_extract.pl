@@ -18,7 +18,7 @@ my $total_lines = 0;
 my $unique_combinations = 0;
 my $update_interval = 100000;
 
-foreach my $filelist (@filelists_files) {
+for my $filelist (@filelists_files) {
     open(my $zck_output, '-|', "unzck -c $filelist") or die "Cannot run unzck: $!";
 
     my $current_package = '';

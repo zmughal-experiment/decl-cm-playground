@@ -25,7 +25,7 @@ my $total_lines = 0;
 my $unique_combinations = 0;
 my $update_interval = 10000;  # Show update every 10000 lines
 
-foreach my $package (@packages) {
+for my $package (@packages) {
     warn "Processing package: $package\n";
     open(my $dnf_output, '-|', 'dnf', @dnf_opts, 'repoquery', '-l', $package) or die "Cannot run dnf repoquery for $package: $!";
 

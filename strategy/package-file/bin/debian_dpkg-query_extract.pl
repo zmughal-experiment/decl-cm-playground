@@ -6,10 +6,10 @@ my @packages = split /\n/, `dpkg-query -f '\${Package}\n' -W`;
 my $total_packages = scalar @packages;
 my $processed = 0;
 
-foreach my $package (@packages) {
+for my $package (@packages) {
     $processed++;
     my @files = split /\n/, `dpkg -L $package`;
-    foreach my $file (@files) {
+    for my $file (@files) {
         next if $file =~ /^package diverts others to:\ /;
         print "$package:$file\n";
     }

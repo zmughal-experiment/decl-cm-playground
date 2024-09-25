@@ -50,7 +50,7 @@ my @distributions = (
     },
 );
 
-foreach my $dist (@distributions) {
+for my $dist (@distributions) {
     print "Extracting files for $dist->{name}...\n";
 
     # Generate Dockerfile content

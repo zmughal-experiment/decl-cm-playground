@@ -14,7 +14,7 @@ if (!-d $package_dir) {
 my @packages = `rpm -qa --dbpath $package_dir`;
 chomp @packages;
 
-foreach my $package (@packages) {
+for my $package (@packages) {
     #warn "Processing package: $package\n";
     my @files = `rpm -ql $package 2>&1`;
     if ($? != 0) {
@@ -22,7 +22,7 @@ foreach my $package (@packages) {
         next;
     }
     chomp @files;
-    foreach my $file (@files) {
+    for my $file (@files) {
         print "$package:$file\n";
     }
 }
