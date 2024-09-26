@@ -1,52 +1,60 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use feature qw(say);
+use stable qw(postderef);
+
 use Capture::Tiny qw(tee);
 use Data::Dumper;
 use Path::Tiny v0.022;
 
+my %platform_type = (
+    debian_apt => {
+        image => 'debian:latest',
+        install_cmd => 'apt-get update && apt-get install -y --no-install-recommends %s',
+    },
+    rpm_dnf    => {
+        image => 'fedora:latest',
+        install_cmd => 'dnf install -y %s'
+    },
+);
+
 my @distributions = (
     {
         name => 'debian',
-        image => 'debian:latest',
         script => 'debian_extract.pl',
-        output => 'debian_files.txt',
-        install_cmd => 'apt-get update && apt-get install -y perl perl-modules',
+        packages => [qw(perl perl-modules)],
+        platform => 'debian_apt',
     },
     {
         name => 'debian_dpkg-query',
-        image => 'debian:latest',
         script => 'debian_dpkg-query_extract.pl',
-        output => 'debian_dpkg-query_files.txt',
-        install_cmd => 'apt-get update && apt-get install -y perl perl-modules',
+        packages => [qw(perl perl-modules)],
+        platform => 'debian_apt',
     },
     {
         name => 'debian_apt_file',
-        image => 'debian:latest',
         script => 'debian_apt_file_extract.pl',
-        output => 'debian_apt_file_files.txt',
-        install_cmd => 'apt-get update && apt-get install -y perl perl-modules apt-file',
+        packages => [qw(perl perl-modules apt-file)],
+        platform => 'debian_apt',
     },
     {
         name => 'fedora',
-        image => 'fedora:latest',
         script => 'fedora_extract.pl',
-        output => 'fedora_files.txt',
-        install_cmd => 'dnf install -y perl-interpreter',
+        packages => [qw(perl-interpreter)],
+        platform => 'rpm_dnf',
     },
     {
         name => 'fedora_dnf_repoquery',
-        image => 'fedora:latest',
         script => 'fedora_dnf_repoquery_extract.pl',
-        output => 'fedora_dnf_repoquery_files.txt',
-        install_cmd => 'dnf install -y perl-interpreter',
+        packages => [qw(perl-interpreter)],
+        platform => 'rpm_dnf',
     },
     {
         name => 'fedora_unzck',
-        image => 'fedora:latest',
         script => 'fedora_unzck_extract.pl',
-        output => 'fedora_unzck_files.txt',
-        install_cmd => 'dnf install -y perl-interpreter zchunk perl-File-Find',
+        packages => [qw(perl-interpreter zchunk perl-File-Find)],
+        platform => 'rpm_dnf',
     },
 );
 
@@ -55,8 +63,9 @@ for my $dist (@distributions) {
 
     # Generate Dockerfile content
     my $dockerfile = <<~EOF;
-        FROM $dist->{image}
-        RUN $dist->{install_cmd}
+        FROM $platform_type{$dist->{platform}}{image}
+        RUN @{[ sprintf $platform_type{$dist->{platform}}{install_cmd},
+                    join " ", sort $dist->{packages}->@* ]}
     EOF
 
     # Build the Docker image
@@ -71,15 +80,17 @@ for my $dist (@distributions) {
         next;
     }
 
-    my $output_file = path(qw(work package-file), $dist->{output});
+    my $top = path(qw(strategy package-file));
+    my $script_file = $top->child(qw(bin), $dist->{script});
+    my $output_file = $top->absolute('work')->relative('.')->child( "$dist->{name}.list" );
     next if $output_file->exists;
     $output_file->touchpath;
 
     # Run the Docker container
     my @cmd = (
         'docker', 'run', '--rm',
-        '-v', "./strategy/package-file/bin/$dist->{script}:/extract.pl:ro",
-        '-v', "@{[$output_file->absolute->stringify]}:/output.txt",
+        '-v', "$script_file:/extract.pl:ro",
+        '-v', "$output_file:/output.txt",
         $image_name,
         'bash', '-c', 'perl /extract.pl > /output.txt'
     );
