@@ -12,10 +12,12 @@ my %platform_type = (
     debian_apt => {
         image => 'debian:latest',
         install_cmd => 'apt-get update && apt-get install -y --no-install-recommends %s',
+        perl_packages => [qw(perl perl-modules cpanminus)],
     },
     rpm_dnf    => {
         image => 'fedora:latest',
-        install_cmd => 'dnf install -y %s'
+        install_cmd => 'dnf install -y %s',
+        perl_packages => [qw(perl-interpreter perl-App-cpanminus)],
     },
 );
 
@@ -23,49 +25,49 @@ my @distributions = (
     {
         name => 'debian',
         script => 'debian_extract.pl',
-        packages => [qw(perl perl-modules)],
         platform => 'debian_apt',
     },
     {
         name => 'debian_dpkg-query',
         script => 'debian_dpkg-query_extract.pl',
-        packages => [qw(perl perl-modules)],
         platform => 'debian_apt',
     },
     {
         name => 'debian_apt_file',
         script => 'debian_apt_file_extract.pl',
-        packages => [qw(perl perl-modules apt-file)],
+        packages => [qw(apt-file)],
         platform => 'debian_apt',
     },
     {
         name => 'fedora',
         script => 'fedora_extract.pl',
-        packages => [qw(perl-interpreter)],
         platform => 'rpm_dnf',
     },
     {
         name => 'fedora_dnf_repoquery',
         script => 'fedora_dnf_repoquery_extract.pl',
-        packages => [qw(perl-interpreter)],
         platform => 'rpm_dnf',
     },
     {
         name => 'fedora_unzck',
         script => 'fedora_unzck_extract.pl',
-        packages => [qw(perl-interpreter zchunk perl-File-Find)],
+        packages => [qw(zchunk perl-File-Find)],
         platform => 'rpm_dnf',
     },
 );
 
 for my $dist (@distributions) {
     print "Extracting files for $dist->{name}...\n";
+    my %platform_meta = $platform_type{$dist->{platform}}->%*;
 
     # Generate Dockerfile content
     my $dockerfile = <<~EOF;
-        FROM $platform_type{$dist->{platform}}{image}
-        RUN @{[ sprintf $platform_type{$dist->{platform}}{install_cmd},
-                    join " ", sort $dist->{packages}->@* ]}
+        FROM $platform_meta{image}
+        RUN @{[ sprintf $platform_meta{install_cmd},
+                    join " ",
+                        sort(($platform_meta{perl_packages} // [])->@*,
+                             ($dist->{packages} // [])->@*, )
+                    ]}
     EOF
 
     # Build the Docker image
