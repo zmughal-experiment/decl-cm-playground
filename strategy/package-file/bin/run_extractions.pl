@@ -24,33 +24,33 @@ my %platform_type = (
 my @distributions = (
     {
         name => 'debian',
-        script => 'debian_extract.pl',
+        module => 'PackageFile::Platform::APT::DpkgInfo',
         platform => 'debian_apt',
     },
     {
         name => 'debian_dpkg-query',
-        script => 'debian_dpkg-query_extract.pl',
+        module => 'PackageFile::Platform::APT::DpkgQuery',
         platform => 'debian_apt',
     },
     {
         name => 'debian_apt_file',
-        script => 'debian_apt_file_extract.pl',
+        module => 'PackageFile::Platform::APT::AptFile',
         packages => [qw(apt-file)],
         platform => 'debian_apt',
     },
     {
         name => 'fedora',
-        script => 'fedora_extract.pl',
+        module => 'PackageFile::Platform::RPM::RpmQuery',
         platform => 'rpm_dnf',
     },
     {
         name => 'fedora_dnf_repoquery',
-        script => 'fedora_dnf_repoquery_extract.pl',
+        module => 'PackageFile::Platform::RPM::DnfRepoquery',
         platform => 'rpm_dnf',
     },
     {
         name => 'fedora_unzck',
-        script => 'fedora_unzck_extract.pl',
+        module => 'PackageFile::Platform::RPM::Unzck',
         packages => [qw(zchunk perl-File-Find)],
         platform => 'rpm_dnf',
     },
@@ -83,18 +83,23 @@ for my $dist (@distributions) {
     }
 
     my $top = path(qw(strategy package-file));
-    my $script_file = $top->child(qw(bin), $dist->{script});
-    my $output_file = $top->absolute('work')->relative('.')->child( "$dist->{name}.list" );
+    my $module = $dist->{module};
+    my $lib_dir = $top->child(qw(lib))->absolute;
+    my $output_file = $top
+        ->absolute('work')->relative('.')
+        ->child( "$dist->{name}.list" )->absolute;
     next if $output_file->exists;
     $output_file->touchpath;
 
     # Run the Docker container
     my @cmd = (
         'docker', 'run', '--rm',
-        '-v', "$script_file:/extract.pl:ro",
+        '-v', "$lib_dir:/work/lib:ro",
         '-v', "$output_file:/output.txt",
+        '-e', "MODULE=$module",
         $image_name,
-        'bash', '-c', 'perl /extract.pl > /output.txt'
+        'bash', '-c',
+            q{perl -I/work/lib -M$MODULE -MEnv=MODULE -e '$MODULE->extract'  > /output.txt}
     );
 
     print "Docker command for $dist->{name}:\n";
