@@ -88,7 +88,7 @@ for my $dist (@distributions) {
     my $output_file = $top
         ->absolute('work')->relative('.')
         ->child( "$dist->{name}.list" )->absolute;
-    next if $output_file->exists;
+    next if $output_file->exists && $output_file->size;
     $output_file->touchpath;
 
     # Run the Docker container
@@ -107,10 +107,22 @@ for my $dist (@distributions) {
 
     my $exit = system(@cmd);
 
+    my $failure = 0;
     if ($exit == 0) {
         print "Extraction complete for $dist->{name}. Output saved to $output_file\n";
     } else {
         print "Failed to run Docker command for $dist->{name}.\n";
+        $failure = 1;
+    }
+
+    unless($output_file->size) {
+        warn "Output $output_file was empty";
+        $failure = 1;
+    }
+
+    if($failure) {
+        $output_file->remove;
+        next;
     }
 
     my ($head_stdout, $head_stderr, $head_exit) = tee {
