@@ -8,23 +8,15 @@ use Capture::Tiny qw(tee capture_stdout);
 use Data::Dumper;
 use Path::Tiny v0.022;
 use Module::Runtime qw(use_module);
+use YAML qw(LoadFile);
 
 use lib::projectroot qw(lib);
 
 use PackageFile::Speed qw(SLOW);
 
-my %platform_type = (
-    debian_apt => {
-        image => 'debian:latest',
-        install_cmd => 'apt-get update && apt-get install -y --no-install-recommends %s',
-        perl_packages => [qw(perl perl-modules cpanminus)],
-    },
-    rpm_dnf    => {
-        image => 'fedora:latest',
-        install_cmd => 'dnf install -y %s',
-        perl_packages => [qw(perl-interpreter perl-App-cpanminus)],
-    },
-);
+my $platform_types_file = path($lib::projectroot::ROOT)
+	->child('data', 'platform_types.yaml');
+my %platform_type = LoadFile( $platform_types_file )->%*;
 
 my @distributions = (
     {

@@ -1,0 +1,16 @@
+debian_apt:
+  image: debian:latest
+  install_cmd: >-
+    apt-get update && apt-get install -y --no-install-recommends %s
+  perl_packages:
+    - perl
+    - perl-modules
+    - cpanminus
+
+rpm_dnf:
+ image: fedora:latest
+ install_cmd: >-
+   dnf install -y %s
+ perl_packages:
+   - perl-interpreter
+   - perl-App-cpanminus
