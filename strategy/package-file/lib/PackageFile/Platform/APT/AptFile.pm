@@ -5,6 +5,12 @@ use strict;
 use warnings;
 use IPC::Open3;
 
+use PackageFile::Scope qw(REPOSITORY);
+
+sub scope {
+	return REPOSITORY;
+}
+
 sub _update {
 	# Update apt-file database
 	warn "Updating apt-file database...\n";

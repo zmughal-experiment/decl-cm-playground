@@ -5,6 +5,12 @@ use strict;
 use warnings;
 use File::Find;
 
+use PackageFile::Scope qw(INSTALLED);
+
+sub scope {
+	return INSTALLED;
+}
+
 sub extract {
     my $package_dir = '/var/lib/dpkg/info';
 

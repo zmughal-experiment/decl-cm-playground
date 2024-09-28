@@ -4,6 +4,12 @@ package PackageFile::Platform::APT::DpkgQuery;
 use strict;
 use warnings;
 
+use PackageFile::Scope qw(INSTALLED);
+
+sub scope {
+	return INSTALLED;
+}
+
 sub extract {
     my @packages = split /\n/, `dpkg-query -f '\${Package}\n' -W`;
     my $total_packages = scalar @packages;

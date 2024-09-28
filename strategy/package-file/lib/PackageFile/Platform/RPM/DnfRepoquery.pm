@@ -5,6 +5,12 @@ use strict;
 use warnings;
 use IPC::Open3;
 
+use PackageFile::Scope qw(REPOSITORY);
+
+sub scope {
+	return REPOSITORY;
+}
+
 sub extract {
     # Update dnf cache
     warn "Updating dnf cache...\n";

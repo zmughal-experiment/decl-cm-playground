@@ -5,6 +5,12 @@ use strict;
 use warnings;
 use File::Find;
 
+use PackageFile::Scope qw(REPOSITORY);
+
+sub scope {
+	return REPOSITORY;
+}
+
 sub extract {
     my $cache_dir = '/var/cache/dnf';
     my @filelists_files;
