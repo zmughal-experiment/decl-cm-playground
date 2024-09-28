@@ -5,9 +5,14 @@ use strict;
 use warnings;
 
 use PackageFile::Scope qw(INSTALLED);
+use PackageFile::Speed qw(FAST);
 
 sub scope {
 	return INSTALLED;
+}
+
+sub speed {
+	return FAST;
 }
 
 sub extract {

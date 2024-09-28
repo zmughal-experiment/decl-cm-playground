@@ -6,9 +6,14 @@ use warnings;
 use IPC::Open3;
 
 use PackageFile::Scope qw(REPOSITORY);
+use PackageFile::Speed qw(FAST);
 
 sub scope {
 	return REPOSITORY;
+}
+
+sub speed {
+    return FAST;
 }
 
 sub _update {

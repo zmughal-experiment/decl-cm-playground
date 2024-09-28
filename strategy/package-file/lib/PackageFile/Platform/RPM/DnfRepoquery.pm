@@ -6,9 +6,14 @@ use warnings;
 use IPC::Open3;
 
 use PackageFile::Scope qw(REPOSITORY);
+use PackageFile::Speed qw(SLOW);
 
 sub scope {
 	return REPOSITORY;
+}
+
+sub speed {
+	return SLOW;
 }
 
 sub extract {

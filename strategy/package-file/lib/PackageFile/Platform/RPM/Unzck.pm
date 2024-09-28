@@ -6,9 +6,14 @@ use warnings;
 use File::Find;
 
 use PackageFile::Scope qw(REPOSITORY);
+use PackageFile::Speed qw(FAST);
 
 sub scope {
 	return REPOSITORY;
+}
+
+sub speed {
+	return FAST;
 }
 
 sub extract {
