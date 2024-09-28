@@ -57,7 +57,7 @@ my @distributions = (
 );
 
 for my $dist (@distributions) {
-    print "Extracting files for $dist->{name}...\n";
+    print STDERR "Extracting files for $dist->{name}...\n";
     my %platform_meta = $platform_type{$dist->{platform}}->%*;
 
     # Generate Dockerfile content
@@ -102,16 +102,16 @@ for my $dist (@distributions) {
             q{perl -I/work/lib -M$MODULE -MEnv=MODULE -e '$MODULE->extract'  > /output.txt}
     );
 
-    print "Docker command for $dist->{name}:\n";
-    print Dumper(\@cmd);
+    print STDERR "Docker command for $dist->{name}:\n";
+    print STDERR Dumper(\@cmd);
 
     my $exit = system(@cmd);
 
     my $failure = 0;
     if ($exit == 0) {
-        print "Extraction complete for $dist->{name}. Output saved to $output_file\n";
+        print STDERR "Extraction complete for $dist->{name}. Output saved to $output_file\n";
     } else {
-        print "Failed to run Docker command for $dist->{name}.\n";
+        print STDERR "Failed to run Docker command for $dist->{name}.\n";
         $failure = 1;
     }
 
@@ -128,13 +128,13 @@ for my $dist (@distributions) {
     my ($head_stdout, $head_stderr, $head_exit) = tee {
         system('head', '-n', '5', $output_file);
     };
-    print "Failed to read first few lines of $output_file.\n" unless $head_exit == 0;
+    print STDERR "Failed to read first few lines of $output_file.\n" unless $head_exit == 0;
 
     my ($wc_stdout, $wc_stderr, $wc_exit) = tee {
         system('wc', '-l', $output_file);
     };
-    print "Failed to read line count of $output_file.\n" unless $wc_exit == 0;
-    print "Line count: $wc_stdout\n";
+    print STDERR "Failed to read line count of $output_file.\n" unless $wc_exit == 0;
+    print STDERR "Line count: $wc_stdout\n";
 }
 
-print "All extractions completed.\n";
+print STDERR "All extractions completed.\n";
