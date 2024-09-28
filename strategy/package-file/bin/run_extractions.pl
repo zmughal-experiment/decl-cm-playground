@@ -4,9 +4,12 @@ use warnings;
 use feature qw(say);
 use stable qw(postderef);
 
-use Capture::Tiny qw(tee);
+use Capture::Tiny qw(tee capture_stdout);
 use Data::Dumper;
 use Path::Tiny v0.022;
+use Module::Runtime qw(use_module);
+
+use lib::projectroot qw(lib);
 
 my %platform_type = (
     debian_apt => {
@@ -60,6 +63,25 @@ for my $dist (@distributions) {
     print STDERR "Extracting files for $dist->{name}...\n";
     my %platform_meta = $platform_type{$dist->{platform}}->%*;
 
+    my $top = path(qw(strategy package-file));
+    my $module = $dist->{module};
+    my $lib_dir = $top->child(qw(lib))->absolute;
+    my $output_file = $top
+        ->absolute('work')->relative('.')
+        ->child( "$dist->{name}.list" )->absolute;
+    if($output_file->exists && $output_file->size) {
+        say join "\t",
+            use_module($module)->scope,
+            do {
+                my ($stdout, $exit) = capture_stdout { system(qw(wc -l), $output_file) };
+                die "Could not run wc" unless 0 == $exit;
+                ( $stdout =~ /^(\d+)/ )[0];
+            },
+            $output_file->basename;
+        next;
+    }
+    $output_file->touchpath;
+
     # Generate Dockerfile content
     my $dockerfile = <<~EOF;
         FROM $platform_meta{image}
@@ -81,15 +103,6 @@ for my $dist (@distributions) {
         print "Failed to build Docker image for $dist->{name}.\n";
         next;
     }
-
-    my $top = path(qw(strategy package-file));
-    my $module = $dist->{module};
-    my $lib_dir = $top->child(qw(lib))->absolute;
-    my $output_file = $top
-        ->absolute('work')->relative('.')
-        ->child( "$dist->{name}.list" )->absolute;
-    next if $output_file->exists && $output_file->size;
-    $output_file->touchpath;
 
     # Run the Docker container
     my @cmd = (
