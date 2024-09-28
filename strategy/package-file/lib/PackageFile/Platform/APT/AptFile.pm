@@ -16,6 +16,10 @@ sub speed {
     return FAST;
 }
 
+sub required_packages {
+    return [qw(apt-file)];
+}
+
 sub _update {
 	# Update apt-file database
 	warn "Updating apt-file database...\n";

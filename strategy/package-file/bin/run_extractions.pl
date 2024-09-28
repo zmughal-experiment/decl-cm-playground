@@ -32,7 +32,6 @@ my @distributions = (
     {
         name => 'debian_apt_file',
         module => 'PackageFile::Platform::APT::AptFile',
-        packages => [qw(apt-file)],
         platform => 'debian_apt',
     },
     {
@@ -48,14 +47,14 @@ my @distributions = (
     {
         name => 'fedora_unzck',
         module => 'PackageFile::Platform::RPM::Unzck',
-        packages => [qw(zchunk perl-File-Find)],
         platform => 'rpm_dnf',
     },
 );
 
 for my $dist (@distributions) {
     my $module = $dist->{module};
-    next if use_module($module)->speed eq SLOW;
+    use_module($module);
+    next if $module->speed eq SLOW;
 
     print STDERR "Extracting files for $dist->{name}...\n";
     my %platform_meta = $platform_type{$dist->{platform}}->%*;
@@ -67,7 +66,7 @@ for my $dist (@distributions) {
         ->child( "$dist->{name}.list" )->absolute;
     if($output_file->exists && $output_file->size) {
         say join "\t",
-            use_module($module)->scope,
+            $module->scope,
             do {
                 my ($stdout, $exit) = capture_stdout { system(qw(wc -l), $output_file) };
                 die "Could not run wc" unless 0 == $exit;
@@ -78,13 +77,19 @@ for my $dist (@distributions) {
     }
     $output_file->touchpath;
 
+    my @packages = sort(
+        ( $platform_meta{perl_packages} // [] )->@*,
+        ( $module->can(required_packages => )
+        ? $module->required_packages->@*
+        : ()
+        ),
+    );
+
     # Generate Dockerfile content
     my $dockerfile = <<~EOF;
         FROM $platform_meta{image}
         RUN @{[ sprintf $platform_meta{install_cmd},
-                    join " ",
-                        sort(($platform_meta{perl_packages} // [])->@*,
-                             ($dist->{packages} // [])->@*, )
+                    join " ", @packages
                     ]}
     EOF
 

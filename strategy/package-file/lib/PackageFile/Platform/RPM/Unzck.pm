@@ -16,6 +16,10 @@ sub speed {
 	return FAST;
 }
 
+sub required_packages {
+    return [qw(zchunk perl-File-Find)];
+}
+
 sub extract {
     my $cache_dir = '/var/cache/dnf';
     my @filelists_files;
