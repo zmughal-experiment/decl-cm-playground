@@ -11,6 +11,8 @@ use Module::Runtime qw(use_module);
 
 use lib::projectroot qw(lib);
 
+use PackageFile::Speed qw(SLOW);
+
 my %platform_type = (
     debian_apt => {
         image => 'debian:latest',
@@ -60,11 +62,13 @@ my @distributions = (
 );
 
 for my $dist (@distributions) {
+    my $module = $dist->{module};
+    next if use_module($module)->speed eq SLOW;
+
     print STDERR "Extracting files for $dist->{name}...\n";
     my %platform_meta = $platform_type{$dist->{platform}}->%*;
 
     my $top = path(qw(strategy package-file));
-    my $module = $dist->{module};
     my $lib_dir = $top->child(qw(lib))->absolute;
     my $output_file = $top
         ->absolute('work')->relative('.')
