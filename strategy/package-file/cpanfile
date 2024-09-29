@@ -3,6 +3,7 @@ requires 'Data::Dumper';
 requires 'Exporter';
 requires 'File::Find';
 requires 'IPC::Open3';
+requires 'Module::Loader';
 requires 'Module::Runtime';
 requires 'Path::Tiny', 'v0.22.0';
 requires 'YAML';

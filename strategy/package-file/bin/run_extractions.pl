@@ -8,6 +8,7 @@ use Capture::Tiny qw(tee capture_stdout);
 use Data::Dumper;
 use Path::Tiny v0.022;
 use Module::Runtime qw(use_module);
+use Module::Loader;
 use YAML qw(LoadFile);
 
 use lib::projectroot qw(lib);
@@ -19,29 +20,9 @@ my $platform_types_file = path($lib::projectroot::ROOT)
 	->child('data', 'platform_types.yaml');
 my %platform_type = LoadFile( $platform_types_file )->%*;
 
-my @distributions = (
-    {
-        module => 'PackageFile::Platform::APT::DpkgInfo',
-    },
-    {
-        module => 'PackageFile::Platform::APT::DpkgQuery',
-    },
-    {
-        module => 'PackageFile::Platform::APT::AptFile',
-    },
-    {
-        module => 'PackageFile::Platform::RPM::RpmQuery',
-    },
-    {
-        module => 'PackageFile::Platform::RPM::DnfRepoquery',
-    },
-    {
-        module => 'PackageFile::Platform::RPM::Unzck',
-    },
-);
-
-for my $dist (@distributions) {
-    my $module = $dist->{module};
+my $loader = Module::Loader->new;
+my @extractors = $loader->find_modules('PackageFile::Platform');
+for my $module (sort @extractors) {
     use_module($module);
     next if $module->speed eq SLOW;
     next unless $module->scope eq REPOSITORY;
