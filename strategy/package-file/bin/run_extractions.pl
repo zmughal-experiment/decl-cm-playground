@@ -12,6 +12,7 @@ use YAML qw(LoadFile);
 
 use lib::projectroot qw(lib);
 
+use PackageFile::Scope qw(REPOSITORY);
 use PackageFile::Speed qw(SLOW);
 
 my $platform_types_file = path($lib::projectroot::ROOT)
@@ -49,6 +50,7 @@ for my $dist (@distributions) {
     my $module = $dist->{module};
     use_module($module);
     next if $module->speed eq SLOW;
+    next unless $module->scope eq REPOSITORY;
 
     print STDERR "Extracting files for $dist->{name}...\n";
     my %platform_meta = $platform_type{$module->platform_type}->%*;
