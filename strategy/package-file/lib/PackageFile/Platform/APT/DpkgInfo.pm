@@ -16,6 +16,10 @@ sub speed {
     return FAST;
 }
 
+sub platform_type {
+	return 'debian_apt';
+}
+
 sub extract {
     my $package_dir = '/var/lib/dpkg/info';
 

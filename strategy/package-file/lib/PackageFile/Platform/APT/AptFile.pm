@@ -20,6 +20,10 @@ sub required_packages {
     return [qw(apt-file)];
 }
 
+sub platform_type {
+	return 'debian_apt';
+}
+
 sub _update {
 	# Update apt-file database
 	warn "Updating apt-file database...\n";

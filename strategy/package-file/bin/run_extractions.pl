@@ -54,10 +54,11 @@ my @distributions = (
 for my $dist (@distributions) {
     my $module = $dist->{module};
     use_module($module);
+    die unless $module->platform_type eq $dist->{platform};
     next if $module->speed eq SLOW;
 
     print STDERR "Extracting files for $dist->{name}...\n";
-    my %platform_meta = $platform_type{$dist->{platform}}->%*;
+    my %platform_meta = $platform_type{$module->platform_type}->%*;
 
     my $top = path(qw(strategy package-file));
     my $lib_dir = $top->child(qw(lib))->absolute;

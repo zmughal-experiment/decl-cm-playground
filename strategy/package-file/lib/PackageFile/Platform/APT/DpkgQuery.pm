@@ -15,6 +15,10 @@ sub speed {
 	return FAST;
 }
 
+sub platform_type {
+	return 'debian_apt';
+}
+
 sub extract {
     my @packages = split /\n/, `dpkg-query -f '\${Package}\n' -W`;
     my $total_packages = scalar @packages;

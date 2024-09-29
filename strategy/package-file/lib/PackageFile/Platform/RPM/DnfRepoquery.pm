@@ -16,6 +16,10 @@ sub speed {
 	return SLOW;
 }
 
+sub platform_type {
+	return 'rpm_dnf';
+}
+
 sub extract {
     # Update dnf cache
     warn "Updating dnf cache...\n";

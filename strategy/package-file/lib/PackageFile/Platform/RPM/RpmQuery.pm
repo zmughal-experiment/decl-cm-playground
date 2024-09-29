@@ -15,6 +15,10 @@ sub speed {
 	return FAST;
 }
 
+sub platform_type {
+	return 'rpm_dnf';
+}
+
 sub extract {
     my $package_dir = '/var/lib/rpm';
 

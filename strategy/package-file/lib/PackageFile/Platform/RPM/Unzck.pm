@@ -20,6 +20,10 @@ sub required_packages {
     return [qw(zchunk perl-File-Find)];
 }
 
+sub platform_type {
+	return 'rpm_dnf';
+}
+
 sub extract {
     my $cache_dir = '/var/cache/dnf';
     my @filelists_files;
