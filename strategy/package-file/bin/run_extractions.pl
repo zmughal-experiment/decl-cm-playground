@@ -21,27 +21,21 @@ my %platform_type = LoadFile( $platform_types_file )->%*;
 
 my @distributions = (
     {
-        name => 'debian',
         module => 'PackageFile::Platform::APT::DpkgInfo',
     },
     {
-        name => 'debian_dpkg-query',
         module => 'PackageFile::Platform::APT::DpkgQuery',
     },
     {
-        name => 'debian_apt_file',
         module => 'PackageFile::Platform::APT::AptFile',
     },
     {
-        name => 'fedora',
         module => 'PackageFile::Platform::RPM::RpmQuery',
     },
     {
-        name => 'fedora_dnf_repoquery',
         module => 'PackageFile::Platform::RPM::DnfRepoquery',
     },
     {
-        name => 'fedora_unzck',
         module => 'PackageFile::Platform::RPM::Unzck',
     },
 );
@@ -52,14 +46,18 @@ for my $dist (@distributions) {
     next if $module->speed eq SLOW;
     next unless $module->scope eq REPOSITORY;
 
-    print STDERR "Extracting files for $dist->{name}...\n";
+    my $name = sprintf "%s__%s",
+        $module->platform_type,
+        ($module =~ /::Platform::(.*)$/)[0] =~ s/::/_/gr;
+
+    print STDERR "Extracting files for $name...\n";
     my %platform_meta = $platform_type{$module->platform_type}->%*;
 
     my $top = path(qw(strategy package-file));
     my $lib_dir = $top->child(qw(lib))->absolute;
     my $output_file = $top
         ->absolute('work')->relative('.')
-        ->child( "$dist->{name}.list" )->absolute;
+        ->child( "$name.list" )->absolute;
     if($output_file->exists && $output_file->size) {
         say join "\t",
             $module->scope,
@@ -90,14 +88,14 @@ for my $dist (@distributions) {
     EOF
 
     # Build the Docker image
-    my $image_name = "decl-cm-playground/package-file/extractor-$dist->{name}";
+    my $image_name = lc "decl-cm-playground/package-file/extractor-$name";
     open(my $docker_build, '|-', 'docker', 'build', '-t', $image_name, '-')
         or die "Could not open pipe to docker build: $!";
     print $docker_build $dockerfile;
     close($docker_build);
 
     if ($? != 0) {
-        print "Failed to build Docker image for $dist->{name}.\n";
+        print "Failed to build Docker image for $name.\n";
         next;
     }
 
@@ -112,16 +110,16 @@ for my $dist (@distributions) {
             q{perl -I/work/lib -M$MODULE -MEnv=MODULE -e '$MODULE->extract'  > /output.txt}
     );
 
-    print STDERR "Docker command for $dist->{name}:\n";
+    print STDERR "Docker command for $name:\n";
     print STDERR Dumper(\@cmd);
 
     my $exit = system(@cmd);
 
     my $failure = 0;
     if ($exit == 0) {
-        print STDERR "Extraction complete for $dist->{name}. Output saved to $output_file\n";
+        print STDERR "Extraction complete for $name. Output saved to $output_file\n";
     } else {
-        print STDERR "Failed to run Docker command for $dist->{name}.\n";
+        print STDERR "Failed to run Docker command for $name.\n";
         $failure = 1;
     }
 
