@@ -19,29 +19,32 @@ endif
 # Function to compare version numbers using Perl
 # Usage: $(call version-at-least,VERSION_TO_CHECK,MINIMUM_VERSION)
 # Returns 'true' if VERSION_TO_CHECK is at least MINIMUM_VERSION, empty otherwise
-define version-at-least
-$(shell perl -MList::Util=max -e '         \
+define version-at-least-perl-e =
     sub version_compare {                  \
         my @v  = map { [split /\./] } @_;  \
-        my @v1 = @{ $$v[0] };              \
-        my @v2 = @{ $$v[1] };              \
-        my $$len = max(0+@v1, 0+@v2);      \
-        for my $$i (0..$$len-1) {          \
-            my $$cmp =                     \
-                       ($$v1[$$i] || 0)    \
-                   <=> ($$v2[$$i] || 0);   \
-            return $$cmp if $$cmp;         \
+        my @v1 = @{ $v[0] };               \
+        my @v2 = @{ $v[1] };               \
+        my $len = max(0+@v1, 0+@v2);       \
+        for my $i (0..$len-1) {            \
+            my $cmp =                      \
+                       ($v1[$i] || 0)      \
+                   <=> ($v2[$i] || 0);     \
+            return $cmp if $cmp;           \
         }                                  \
         return 0;                          \
     }                                      \
     exit 1 if version_compare(@ARGV) < 0;  \
-    print "true";                          \
+    print "true";
+endef
+define version-at-least =
+$(shell perl -MList::Util=max -e '
+    $(value version-at-least-perl-e)
 ' -- $(1) $(2))
 endef
 
 # Check if GNU Make version is at least $(MAKE_MIN_REQUIRED_VERSION)
 ifeq ($(call version-at-least,$(MAKE_VERSION),$(MAKE_MIN_REQUIRED_VERSION)),)
-$(error This Makefile requires GNU Make $(MAKE_MIN_REQUIRED_VERSION) or later)
+$(error This Makefile requires GNU Make $(MAKE_MIN_REQUIRED_VERSION) or later. Have GNU Make $(MAKE_VERSION))
 endif
 
 MAKEFLAGS += --warn-undefined-variables
