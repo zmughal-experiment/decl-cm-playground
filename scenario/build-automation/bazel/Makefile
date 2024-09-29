@@ -16,6 +16,17 @@ define DEB_PACKAGE_LOCK_FILE
 { "packages": [], "version": 1 }
 endef
 
+define BAZEL_DOCKER_RUN_CMD
+docker run --rm \
+	-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR_REL_ROOT)/debian_snapshot:/workspace    \
+	-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
+	-u $(DOCKER_UID)                                    \
+	-w /workspace                                       \
+	gcr.io/bazel-public/bazel:latest                    \
+		\
+		--output_user_root $(DOCKER_BAZEL_OUTPUT)
+endef
+
 # Requires:
 # docker, find, parallel, ln, rm
 .PHONY: bazel
@@ -31,22 +42,10 @@ bazel: $$(BAZEL_TARGET_BIN_GUARDS)
 	$(MKDIR_P) $(MY_BAZEL_OUTPUT_ROOT)
 	# Create Debian package lock file
 	$(ECHO) '$(DEB_PACKAGE_LOCK_FILE)' > $(THIS_DIR)/debian_snapshot/bullseye.lock.json
-	docker run --rm \
-		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR_REL_ROOT)/debian_snapshot:/workspace    \
-		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
-		-u $(DOCKER_UID)                                    \
-		-w /workspace                                       \
-		gcr.io/bazel-public/bazel:latest                    \
-			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
+	$(BAZEL_DOCKER_RUN_CMD) \
 			run @bullseye//:lock
 	# Create image
-	docker run --rm \
-		-v $(ROOT_DIR_ABSOLUTE)/$(THIS_DIR_REL_ROOT)/debian_snapshot:/workspace    \
-		-v $(MY_BAZEL_OUTPUT_ROOT):$(DOCKER_BAZEL_OUTPUT)   \
-		-u $(DOCKER_UID)                                    \
-		-w /workspace                                       \
-		gcr.io/bazel-public/bazel:latest                    \
-			--output_user_root $(DOCKER_BAZEL_OUTPUT)   \
+	$(BAZEL_DOCKER_RUN_CMD) \
 			build //...
 	# Relink symlinks from Docker to host
 	export FROM="$(DOCKER_BAZEL_OUTPUT)" TO="$(MY_BAZEL_OUTPUT_ROOT)"; \
