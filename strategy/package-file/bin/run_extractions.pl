@@ -22,39 +22,32 @@ my @distributions = (
     {
         name => 'debian',
         module => 'PackageFile::Platform::APT::DpkgInfo',
-        platform => 'debian_apt',
     },
     {
         name => 'debian_dpkg-query',
         module => 'PackageFile::Platform::APT::DpkgQuery',
-        platform => 'debian_apt',
     },
     {
         name => 'debian_apt_file',
         module => 'PackageFile::Platform::APT::AptFile',
-        platform => 'debian_apt',
     },
     {
         name => 'fedora',
         module => 'PackageFile::Platform::RPM::RpmQuery',
-        platform => 'rpm_dnf',
     },
     {
         name => 'fedora_dnf_repoquery',
         module => 'PackageFile::Platform::RPM::DnfRepoquery',
-        platform => 'rpm_dnf',
     },
     {
         name => 'fedora_unzck',
         module => 'PackageFile::Platform::RPM::Unzck',
-        platform => 'rpm_dnf',
     },
 );
 
 for my $dist (@distributions) {
     my $module = $dist->{module};
     use_module($module);
-    die unless $module->platform_type eq $dist->{platform};
     next if $module->speed eq SLOW;
 
     print STDERR "Extracting files for $dist->{name}...\n";
