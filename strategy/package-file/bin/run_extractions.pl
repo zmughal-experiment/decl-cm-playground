@@ -9,16 +9,15 @@ use Data::Dumper;
 use Path::Tiny v0.022;
 use Module::Runtime qw(use_module);
 use Module::Loader;
-use YAML qw(LoadFile);
 
 use lib::projectroot qw(lib);
 
 use PackageFile::Scope qw(REPOSITORY);
 use PackageFile::Speed qw(SLOW);
 
-my $platform_types_file = path($lib::projectroot::ROOT)
-	->child('data', 'platform_types.yaml');
-my %platform_type = LoadFile( $platform_types_file )->%*;
+use PackageFile::Util;
+use PackageFile::Config qw($PLATFORM_TYPES $TOP);
+use PackageFile::ExtractorModule;
 
 my $loader = Module::Loader->new;
 my @extractors = $loader->find_modules('PackageFile::Platform');
@@ -27,12 +26,14 @@ for my $module (sort @extractors) {
     next if $module->speed eq SLOW;
     next unless $module->scope eq REPOSITORY;
 
-    my $name = sprintf "%s__%s",
-        $module->platform_type,
-        ($module =~ /::Platform::(.*)$/)[0] =~ s/::/_/gr;
+    my $extractor = PackageFile::ExtractorModule->new(
+        module => $module,
+    );
+
+    my $name = $extractor->name;
 
     print STDERR "Extracting files for $name...\n";
-    my %platform_meta = $platform_type{$module->platform_type}->%*;
+    my %platform_meta = $extractor->platform_meta->%*;
 
     my $top = path(qw(strategy package-file));
     my $lib_dir = $top->child(qw(lib))->absolute;
@@ -42,11 +43,7 @@ for my $module (sort @extractors) {
     if($output_file->exists && $output_file->size) {
         say join "\t",
             $module->scope,
-            do {
-                my ($stdout, $exit) = capture_stdout { system(qw(wc -l), $output_file) };
-                die "Could not run wc" unless 0 == $exit;
-                ( $stdout =~ /^(\d+)/ )[0];
-            },
+            PackageFile::Util::line_count($output_file),
             $output_file->basename;
         next;
     }

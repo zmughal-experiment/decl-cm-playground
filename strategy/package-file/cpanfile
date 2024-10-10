@@ -1,11 +1,14 @@
 requires 'Capture::Tiny';
+requires 'Const::Fast';
 requires 'Data::Dumper';
 requires 'Exporter';
 requires 'File::Find';
 requires 'IPC::Open3';
 requires 'Module::Loader';
 requires 'Module::Runtime';
+requires 'Mu';
 requires 'Path::Tiny', 'v0.22.0';
+requires 'Types::Common';
 requires 'YAML';
 requires 'constant';
 requires 'feature';
