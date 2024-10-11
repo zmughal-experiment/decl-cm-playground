@@ -35,11 +35,8 @@ for my $module (sort @extractors) {
     print STDERR "Extracting files for $name...\n";
     my %platform_meta = $extractor->platform_meta->%*;
 
-    my $top = path(qw(strategy package-file));
-    my $lib_dir = $top->child(qw(lib))->absolute;
-    my $output_file = $top
-        ->absolute('work')->relative('.')
-        ->child( "$name.list" )->absolute;
+    my $lib_dir = $lib::projectroot::ROOT;
+    my $output_file = $extractor->output_file;
     if($output_file->exists && $output_file->size) {
         say join "\t",
             $module->scope,
@@ -49,13 +46,7 @@ for my $module (sort @extractors) {
     }
     $output_file->touchpath;
 
-    my @packages = sort(
-        ( $platform_meta{perl_packages} // [] )->@*,
-        ( $module->can(required_packages => )
-        ? $module->required_packages->@*
-        : ()
-        ),
-    );
+    my @packages = $extractor->packages->@*;
 
     # Generate Dockerfile content
     my $dockerfile = <<~EOF;
