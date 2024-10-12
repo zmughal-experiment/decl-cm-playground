@@ -118,8 +118,11 @@ env \
 docker compose $(DOCKER_COMPOSE_BASE_ARGS)
 endef
 
+define RULE :=
 $(DOCKER_PGDATA_DIR):
 	$(MKDIR_P) $(@D)
+endef
+$(eval $(RULE))
 
 .PHONY: $(P)docker-compose-up
 define RULE :=
