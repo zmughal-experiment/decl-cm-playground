@@ -1,3 +1,4 @@
+-- SQL: PostgreSQL
 \pset expanded on
 
 SELECT
