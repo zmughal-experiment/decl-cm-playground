@@ -69,6 +69,8 @@ INCLUDES := \
 	strategy/anitya/Makefile                               \
 	strategy/debian-udd/Makefile                           \
 	strategy/repology/Makefile                             \
+	\
+	strategy/package-file/Makefile                         \
 	#
 
 $(foreach inc,$(INCLUDES),$(eval $(call scoped-include,$(ROOT_DIR_RELATIVE)/$(inc))))
